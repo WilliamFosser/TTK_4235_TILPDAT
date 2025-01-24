@@ -5,3 +5,4 @@
 - William Fosser
 
 ### Prosjektbeskrivelse:
+Øvinger, PLS og heislab
