@@ -106,40 +106,48 @@ void check_cab_buttons(Elevator *elevator) {
 
 
 void repreoritize_orders(Elevator *elevator) {
-    elevator->direction;
     uint8_t current_order;
-
-
+    uint8_t search_start = elevator->last_floor + elevator->direction;
+    uint8_t search_end = search_start;
     switch (elevator->direction)
     {
     case DIRN_UP:
-        uint8_t search_start = elevator->last_floor + 1;
-        while (!(elevator->queue.prioritized_orders[search_start])) {
-            search_start++;
-            if (search_start > N_FLOORS) {
+        while (!(elevator->queue.prioritized_orders[search_end])) {
+            search_end++;
+            if (search_end > N_FLOORS) {
+                search_end = search_start;
                 break;
             }
         }
-        current_order = search_start;
-        for (uint8_t i = elevator->last_floor + 1; current_order; i++) {
-
-        } 
         break;
     
     case DIRN_DOWN:
-        uint8_t search_start = elevator->last_floor - 1;
-        while (!(elevator->queue.prioritized_orders[search_start])) {
-            search_start--;
-            if (search_start < 0) {
+        while (!(elevator->queue.prioritized_orders[search_end])) {
+            search_end--;
+            if (search_end < 0) {
+                search_end = search_start;
                 break;
             }
         }
         break;
-        current_order = search_start;
-)
 
     default:
         break;
+    }
+    if (search_start <= search_end) {
+        for (uint8_t i = search_start; i <= search_end; i++) {
+            if (elevator->queue.unprioritized_orders[i]) {
+                elevator->queue.prioritized_orders[i] = true;
+                elevator->queue.unprioritized_orders[i] = false;
+            }
+        }
+    } else {
+        for (uint8_t i = search_start; i > search_end; i--) {
+            if (elevator->queue.unprioritized_orders[i]) {
+                elevator->queue.prioritized_orders[i] = true;
+                elevator->queue.unprioritized_orders[i] = false;
+            }
+        }
     }
 };
 
