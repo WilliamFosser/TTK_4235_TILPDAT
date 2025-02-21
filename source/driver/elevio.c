@@ -42,8 +42,6 @@ void elevio_init(void){
 }
 
 
-
-
 void elevio_motorDirection(MotorDirection dirn){
     pthread_mutex_lock(&sockmtx);
     send(sockfd, (char[4]){1, dirn}, 4, 0);
@@ -85,8 +83,6 @@ void elevio_stopLamp(int value){
     send(sockfd, (char[4]){5, value}, 4, 0);
     pthread_mutex_unlock(&sockmtx);
 }
-
-
 
 
 int elevio_callButton(int floor, ButtonType button){

@@ -1,12 +1,17 @@
+#pragma once
 #include <time.h>
+#include <stdint.h>
 
 
 typedef struct
 {
-    const int duration = 3;
+    time_t duration;
     time_t start_time; 
-    time_t stop_time;
-} timer;
+    time_t current_time;
+} Timer;
+
+// Starts a timer with a given duration in seconds
+void start_timer(time_t duration);
 
 
-time_t =
+

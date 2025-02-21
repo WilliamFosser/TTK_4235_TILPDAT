@@ -1,4 +1,3 @@
-#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,6 +5,9 @@
 #include <time.h>
 #include <stdbool.h>
 #include "driver/elevio.h"
+
+#include "timer.h"
+#include "elevator.h"
 
 
 
@@ -15,15 +17,20 @@
 
 int main(){
 
+
     elevio_init();
     
     printf("=== Elevator starting..... ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
 
-    elevio_motorDirection(DIRN_UP);
+    elevator_init(); // Good
+
+
+    /* elevio_motorDirection(DIRN_UP);
 
     while(1){
         int floor = elevio_floorSensor();
+        printf("Current floor: %d\n", floor);
 
         if(floor == 0){
             elevio_motorDirection(DIRN_UP);
@@ -43,6 +50,7 @@ int main(){
 
         if(elevio_obstruction()){
             elevio_stopLamp(1);
+            printf("Obstruction detected\n");
         } else {
             elevio_stopLamp(0);
         }
@@ -54,6 +62,6 @@ int main(){
         
         nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
     }
-
+ */
     return 0;
 }
