@@ -1,4 +1,6 @@
 #include "elevator.h"
+#include "queue.h"
+#include "driver/elevio.h"
 
 Elevator elevator_init() {
     Elevator elevator = {
@@ -7,6 +9,7 @@ Elevator elevator_init() {
         .stop_button = false,
         .door_open = false,
         .obstructed = false,
+        .queue = new_queue(),
 
     };
 
@@ -74,26 +77,68 @@ void elevator_state_machine(Elevator *elevator) {
 };
 
 // Check if any hall buttons are pressed and update the button lamps and the elevator queue
-void check_hall_buttons() {
+void check_hall_buttons(Elevator *elevator) {
+    bool is_cab_order = false;
     for(int floor = 0; floor < N_FLOORS; floor++){
         for(int button = 0; button < N_BUTTONS-1; button++){ // N_BUTTONS-1 = Exclude cab button
             int buttonPressed = elevio_callButton(floor, button);
-
-            elevio_buttonLamp(floor, button, buttonPressed); //
-
-            add_order(&elevator, floor)
+            elevio_buttonLamp(floor, button, buttonPressed);
+            
+            if (buttonPressed) {
+                add_order(&(elevator->queue), floor, is_cab_order);
+            }
         }
     }
-};    
+}; 
 
 
-
-
-void check_cab_buttons() {
+void check_cab_buttons(Elevator *elevator) {
+    bool is_cab_order = true;
     for(int floor = 0; floor < N_FLOORS; floor++) {
         int buttonPressed = elevio_callButton(floor, BUTTON_CAB);
         elevio_buttonLamp(floor, BUTTON_CAB, buttonPressed);
+
+        if (buttonPressed) {
+            add_order(&(elevator->queue), floor, is_cab_order);
+        }
     }
 };
 
 
+void repreoritize_orders(Elevator *elevator) {
+    elevator->direction;
+    uint8_t current_order;
+
+
+    switch (elevator->direction)
+    {
+    case DIRN_UP:
+        uint8_t search_start = elevator->last_floor + 1;
+        while (!(elevator->queue.prioritized_orders[search_start])) {
+            search_start++;
+            if (search_start > N_FLOORS) {
+                break;
+            }
+        }
+        current_order = search_start;
+        for (uint8_t i = elevator->last_floor + 1; current_order; i++) {
+
+        } 
+        break;
+    
+    case DIRN_DOWN:
+        uint8_t search_start = elevator->last_floor - 1;
+        while (!(elevator->queue.prioritized_orders[search_start])) {
+            search_start--;
+            if (search_start < 0) {
+                break;
+            }
+        }
+        break;
+        current_order = search_start;
+)
+
+    default:
+        break;
+    }
+};
