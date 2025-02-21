@@ -106,7 +106,6 @@ void check_cab_buttons(Elevator *elevator) {
 
 
 void repreoritize_orders(Elevator *elevator) {
-    uint8_t current_order;
     uint8_t search_start = elevator->last_floor + elevator->direction;
     uint8_t search_end = search_start;
     switch (elevator->direction)
@@ -151,4 +150,3 @@ void repreoritize_orders(Elevator *elevator) {
     }
 };
 
-// New branch
