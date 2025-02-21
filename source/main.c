@@ -23,7 +23,11 @@ int main(){
     printf("=== Elevator starting..... ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
 
-    elevator_init(); // Good
+    Elevator elevator = elevator_init();
+    elevator_state_machine(&elevator);
+
+    printf("=== Elevator shutting down ===\n");
+
 
 
     /* elevio_motorDirection(DIRN_UP);
@@ -31,14 +35,6 @@ int main(){
     while(1){
         int floor = elevio_floorSensor();
         printf("Current floor: %d\n", floor);
-
-        if(floor == 0){
-            elevio_motorDirection(DIRN_UP);
-        }
-
-        if(floor == N_FLOORS-1){
-            elevio_motorDirection(DIRN_DOWN);
-        }
 
 
         for(int f = 0; f < N_FLOORS; f++){

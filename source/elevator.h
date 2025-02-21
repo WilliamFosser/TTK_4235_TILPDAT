@@ -27,10 +27,12 @@ Elevator elevator_init();
 void elevator_state_machine(Elevator *elevator); 
 
 
-int8_t get_floor();
+void update_floor(Elevator *elevator);
 void open_door();
 void close_door(); 
 
 void check_hall_buttons(Elevator *elevator);
 void check_cab_buttons(Elevator *elevator);
+void repreoritize_orders(Elevator *elevator);
+void move_elevator(Elevator *elevator);
 

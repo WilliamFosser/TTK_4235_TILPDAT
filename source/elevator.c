@@ -1,6 +1,8 @@
 #include "elevator.h"
 #include "queue.h"
 #include "driver/elevio.h"
+#include "timer.h"
+#include <stdbool.h>
 
 Elevator elevator_init() {
     Elevator elevator = {
@@ -31,9 +33,14 @@ Elevator elevator_init() {
 
 // Returns the current floor of the elevator. 
 // If the elevator is between floors, the function returns -1.
-int8_t get_floor() {
-    return elevio_floorSensor();
+void update_floor(Elevator *elevator) {
+    elevator->floor = elevio_floorSensor();
+    if (elevator->floor != -1) {
+        elevator->last_floor = elevator->floor;
+        elevio_floorIndicator(elevator->floor);
+    }
 };
+
 
 
 void open_door() {
@@ -45,36 +52,6 @@ void close_door() {
     elevio_doorOpenLamp(0);
 };
 
-
-void elevator_state_machine(Elevator *elevator) {
-    elevator->floor = get_floor();
-    
-    switch (elevator->floor)
-    {
-    case -1:
-        /* code */
-        break;
-    
-    case 0:
-        /* code */
-        break;
-
-    case 1:
-        /* code */
-        break;
-
-    case 2:
-        /* code */
-        break;
-
-    case 3:
-        /* code */
-        break;
-    
-    default:
-        break;
-    }
-};
 
 // Check if any hall buttons are pressed and update the button lamps and the elevator queue
 void check_hall_buttons(Elevator *elevator) {
@@ -148,5 +125,12 @@ void repreoritize_orders(Elevator *elevator) {
             }
         }
     }
+};
+
+void move_elevator(Elevator *elevator) {
+    //TODO: Implement move_elevator function
+    // This function should move the elevator to the next floor in the queue
+
+
 };
 

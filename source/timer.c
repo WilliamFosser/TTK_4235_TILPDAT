@@ -9,8 +9,7 @@ Timer start_timer(time_t duration) {
     Timer timer;
     timer.duration = duration;
     time(&timer.start_time);
-    
-    bool timer_active = true;
+
     printf("Timer started \n");
 
     return timer;
