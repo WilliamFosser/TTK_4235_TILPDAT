@@ -13,8 +13,10 @@ typedef struct
     bool stop_button; 
     bool door_open; 
     bool obstructed; 
-    bool internal_buttons[4];
 
+    // Needed when the elevator is stopped, and is starting moving again
+    uint8_t last_floor; 
+    Direction last_direction;
 } Elevator;
 
 
@@ -25,4 +27,7 @@ void elevator_state_machine(Elevator *elevator);
 int8_t get_floor();
 void open_door();
 void close_door(); 
+
+void check_hall_buttons();
+void check_cab_buttons();
 

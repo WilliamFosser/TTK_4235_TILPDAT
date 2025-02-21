@@ -7,7 +7,7 @@ Elevator elevator_init() {
         .stop_button = false,
         .door_open = false,
         .obstructed = false,
-        .internal_buttons = {false, false, false, false}
+
     };
 
     if (elevio_floorSensor() != -1) {
@@ -72,4 +72,28 @@ void elevator_state_machine(Elevator *elevator) {
         break;
     }
 };
+
+// Check if any hall buttons are pressed and update the button lamps and the elevator queue
+void check_hall_buttons() {
+    for(int floor = 0; floor < N_FLOORS; floor++){
+        for(int button = 0; button < N_BUTTONS-1; button++){ // N_BUTTONS-1 = Exclude cab button
+            int buttonPressed = elevio_callButton(floor, button);
+
+            elevio_buttonLamp(floor, button, buttonPressed); //
+
+            add_order(&elevator, floor)
+        }
+    }
+};    
+
+
+
+
+void check_cab_buttons() {
+    for(int floor = 0; floor < N_FLOORS; floor++) {
+        int buttonPressed = elevio_callButton(floor, BUTTON_CAB);
+        elevio_buttonLamp(floor, BUTTON_CAB, buttonPressed);
+    }
+};
+
 
