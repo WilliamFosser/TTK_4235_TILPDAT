@@ -10,7 +10,7 @@ typedef struct
 } Queue;
 
 
-Queue new_queue();
+Queue* new_queue();
 
 void add_order(Queue *queue, uint8_t floor, bool is_cab_order);
 void pop_order(Queue *queue, uint8_t floor);

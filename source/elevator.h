@@ -15,7 +15,7 @@ typedef struct
     bool door_open; 
     bool obstructed; 
 
-    Queue queue;
+    Queue* queue;
 
     // Needed when the elevator is stopped, and is starting moving again
     uint8_t last_floor; 
@@ -23,13 +23,14 @@ typedef struct
 } Elevator;
 
 
-Elevator elevator_init(); 
+Elevator* elevator_init(); 
 void elevator_state_machine(Elevator *elevator); 
 
 
 void update_floor(Elevator *elevator);
-void open_door();
-void close_door(); 
+void open_door(Elevator *elevator);
+void close_door(Elevator *elevator); 
+void set_direction(Elevator *elevator, int8_t direction);
 
 void check_hall_buttons(Elevator *elevator);
 void check_cab_buttons(Elevator *elevator);

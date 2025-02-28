@@ -3,26 +3,46 @@
 #include "driver/elevio.h"
 #include <stdio.h>
 #include <time.h>
+#include "timer.h"
 
 void elevator_state_machine(Elevator *elevator) {
-
     while(1) {
         update_floor(elevator);
         check_hall_buttons(elevator);
         check_cab_buttons(elevator);
-        repreoritize_orders(elevator);
+        close_door(elevator);
 
-        if(elevio_obstruction()){
+
+
+        // Hanle stop button. Dont handle obstruction while stop button active?
+        uint8_t stop_flag = 0;
+        while (elevio_stopButton()) {
+            stop_flag = 1;
             elevio_stopLamp(1);
-            printf("Obstruction detected\n");
-        } else {
-            elevio_stopLamp(0);
+            set_direction(elevator, DIRN_STOP);
+
+            pop_all_orders(elevator->queue);
+
+            if (elevator->floor != -1) {
+                open_door(elevator);
+            }
+        }
+
+        if (elevator->door_open && stop_flag) {
+            stop_flag = 0;
+            Timer *timer = start_timer(3);
+            while (!timer_expired(timer)) {
+                // Wait for 3 seconds
+            }
+            close_door(elevator);
         }
         
-        if(elevio_stopButton()){
-            elevio_motorDirection(DIRN_STOP);
-            break;
-        };
+        elevio_stopLamp(0);
+    
+
+
+        repreoritize_orders(elevator);
+        move_elevator(elevator);
 
 
         //TODO! Implement "move_elevator" function

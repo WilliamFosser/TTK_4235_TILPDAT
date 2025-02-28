@@ -77,7 +77,3 @@
     if(!strcasecmp(_val, #id)){                             \
         _v = id;                                            \
     }
-
-
-
-
