@@ -2,17 +2,15 @@
 #include "timer.h"
 #include <stdbool.h>
 #include <stdio.h>
+//#include <pthread.h>
 
 
 
-Timer start_timer(time_t duration) {
-    Timer timer;
-    timer.duration = duration;
-    time(&timer.start_time);
+void start_timer(Timer *timer, time_t duration) {
+    timer->duration = duration;
+    time(&timer->start_time);
 
     printf("Timer started \n");
-
-    return timer;
 };
 
 

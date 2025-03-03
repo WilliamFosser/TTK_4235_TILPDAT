@@ -23,16 +23,18 @@ typedef struct
 } Elevator;
 
 
-Elevator elevator_init(); 
+void elevator_init(Elevator *elevator); 
 void elevator_state_machine(Elevator *elevator); 
 
 
 void update_floor(Elevator *elevator);
-void open_door();
-void close_door(); 
+void open_door(Elevator *elevator);
+void close_door(Elevator *elevator); 
+void set_direction(Elevator *elevator, Direction direction);
 
 void check_hall_buttons(Elevator *elevator);
 void check_cab_buttons(Elevator *elevator);
-void repreoritize_orders(Elevator *elevator);
+void reprioritize_orders(Elevator *elevator);
+
 void move_elevator(Elevator *elevator);
 
