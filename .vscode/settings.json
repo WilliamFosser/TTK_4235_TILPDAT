@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "pthread.h": "c"
+        "pthread.h": "c",
+        "elevator.h": "c",
+        "elevio.h": "c"
     }
 }

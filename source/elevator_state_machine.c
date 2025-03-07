@@ -14,12 +14,11 @@ void elevator_state_machine(Elevator *elevator) {
         check_cab_buttons(elevator);
         close_door(elevator);
 
+        printf("1");
 
-
-        // Hanle stop button. Dont handle obstruction while stop button active?
-        uint8_t stop_flag = 0;
+        // Handle stop button. Dont handle obstruction while stop button active?
         while (elevio_stopButton()) {
-            stop_flag = 1;
+            elevator->stop_flag = true;
             elevio_stopLamp(1);
             set_direction(elevator, DIRN_STOP);
 
@@ -29,25 +28,29 @@ void elevator_state_machine(Elevator *elevator) {
                 open_door(elevator);
             }
         }
+        printf("2");
 
         elevio_stopLamp(0);
 
-        if (elevator->door_open && stop_flag) {
-            stop_flag = 0;
+        if (elevator->door_open && elevator->stop_flag) {
+            elevator->stop_flag = false;
             start_timer(&timer, 3);
             
             while (!timer_expired(&timer)) {
                 // Wait for 3 seconds
+                check_hall_buttons(elevator);
+                check_cab_buttons(elevator);
             }
             close_door(elevator);
         }
+        printf("3");
         
         
 
 
         reprioritize_orders(elevator);
         move_elevator(elevator);
-
+        printf("4");
 
         //TODO! Implement "move_elevator" function
         

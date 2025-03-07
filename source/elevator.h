@@ -10,16 +10,16 @@ typedef struct
 {
     int8_t floor; //-1 for undefined 
     Direction direction; 
+    uint8_t last_floor; 
+    Direction last_direction; // Needed when the elevator is stopped, and is starting moving again
     
     bool stop_button; 
     bool door_open; 
     bool obstructed; 
+    bool stop_flag;
 
     Queue queue;
-
-    // Needed when the elevator is stopped, and is starting moving again
-    uint8_t last_floor; 
-    Direction last_direction;
+    
 } Elevator;
 
 

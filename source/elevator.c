@@ -13,10 +13,10 @@ void elevator_init(Elevator *elevator) {
     elevator->stop_button = false;
     elevator->door_open = false;
     elevator->obstructed = false;
+    elevator->stop_flag = false; 
+    elevator->last_direction = DIRN_STOP;
 
     new_queue(&(elevator->queue));
-
-
     pop_all_orders(&(elevator->queue));
 
     if (elevio_floorSensor() != -1) {
@@ -28,13 +28,54 @@ void elevator_init(Elevator *elevator) {
             // Wait for elevator to reach a floor
         }
         elevator->floor = elevio_floorSensor();
+        elevator->last_floor = elevator->floor;
         set_direction(elevator, DIRN_STOP);
     }
+
+    
+    // Overkill. Kan gå dit første order kommer 
+    while(1) {
+        check_hall_buttons(elevator);
+        check_cab_buttons(elevator);
+
+
+        uint8_t elevator_up = 0;
+        uint8_t elevator_down = 0;
+
+        for (uint8_t order = elevator->last_floor; order < N_FLOORS; order++) {
+            if (elevator->queue.prioritized_orders[order]) {
+                elevator_up++;
+            }
+        }
+        for (uint8_t order = elevator->last_floor; order >= 0; order--) {
+            if (elevator->queue.prioritized_orders[order]) {
+                elevator_down++;
+            }
+        }
+    
+    
+        if (elevator_up == elevator_down) {
+            set_direction(elevator, DIRN_UP);
+            break;
+        }
+        else if (elevator_up == 0 && elevator_down == 0) {
+            set_direction(elevator, DIRN_STOP);
+        }
+        else if (elevator_up > elevator_down) {
+            set_direction(elevator, DIRN_UP);
+            break;
+        }
+        else {
+            set_direction(elevator, DIRN_DOWN);
+            break;
+        }
+    }
+
+
+    printf("Init finished\n");
 };
 
 
-// Returns the current floor of the elevator. 
-// If the elevator is between floors, the function returns -1.
 void update_floor(Elevator *elevator) {
     elevator->floor = elevio_floorSensor();
     if (elevator->floor != -1) {
@@ -184,28 +225,33 @@ void reprioritize_orders(Elevator *elevator) {
 void move_elevator(Elevator *elevator) {
     //TODO: Implement move_elevator function
     // This function should move the elevator to the next floor in the queue
-    if (!elevator->door_open) {
-        set_direction(elevator, elevator->last_direction);
-        if (elevator->floor == -1) {
-            int8_t check_start = elevator->last_floor + elevator->last_direction;
-            for(; check_start > 0 || check_start < N_FLOORS; check_start+=(elevator->last_direction)) {
-                if (elevator->queue.prioritized_orders[check_start]) {
-                    set_direction(elevator, elevator->last_direction);
-                }
-                else {
-                    set_direction(elevator, (elevator->last_direction) * (-1));
-                }
-            }
-        }
-        else {
-            if (elevator->queue.prioritized_orders[elevator->floor]) {
-                set_direction(elevator, DIRN_STOP);
-                open_door(elevator);
-                pop_order(&elevator->queue, elevator->floor);
-            }
-        }
-    
 
+    if (!elevator->door_open || !elevator->obstructed) {
+
+        bool is_order_in_dir = false; 
+        for (uint8_t order = elevator->last_floor; order < N_FLOORS || order > 0; order+=elevator->direction) {
+            printf("direction %d\n", elevator->direction);
+            if (elevator->queue.prioritized_orders[order]) {
+                is_order_in_dir = true;
+                break;
+            }
+            if (elevator->direction == DIRN_STOP) break;
+        }
+
+        if (!is_order_in_dir) {
+            set_direction(elevator, (-1)*elevator->direction);
+        }
+        
+
+
+
+        if (elevator->queue.prioritized_orders[elevator->last_floor]) {
+            printf("Fant etasje");
+            set_direction(elevator, DIRN_STOP);
+            open_door(elevator);
+            elevator->stop_flag = true;
+            pop_order(&elevator->queue, elevator->last_floor);
+        }
     }
 };
 
