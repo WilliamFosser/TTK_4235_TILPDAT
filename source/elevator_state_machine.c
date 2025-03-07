@@ -12,10 +12,7 @@ void elevator_state_machine(Elevator *elevator) {
         update_floor(elevator);
         check_hall_buttons(elevator);
         check_cab_buttons(elevator);
-        close_door(elevator);
-
-        printf("1");
-
+        
         // Handle stop button. Dont handle obstruction while stop button active?
         while (elevio_stopButton()) {
             elevator->stop_flag = true;
@@ -28,7 +25,6 @@ void elevator_state_machine(Elevator *elevator) {
                 open_door(elevator);
             }
         }
-        printf("2");
 
         elevio_stopLamp(0);
 
@@ -43,14 +39,19 @@ void elevator_state_machine(Elevator *elevator) {
             }
             close_door(elevator);
         }
-        printf("3");
         
         
 
+        printf("Prioritized [");
+        //reprioritize_orders(elevator);
+        for(int i = 0; i<N_FLOORS; i++){
+            printf(",%d",elevator->queue.prioritized_orders[i]);
+        }
+        printf("]\n\n");
 
         reprioritize_orders(elevator);
         move_elevator(elevator);
-        printf("4");
+    
 
         //TODO! Implement "move_elevator" function
         

@@ -27,6 +27,7 @@ int main(){
     elevator_init(&elevator);
     elevator_state_machine(&elevator);
 
+
     printf("=== Elevator shutting down ===\n");
 
     return 0;
