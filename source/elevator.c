@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <time.h>
+#include <assert.h>
 
 
 void elevator_init(Elevator *elevator) {
@@ -14,6 +15,7 @@ void elevator_init(Elevator *elevator) {
     elevator->door_open = false;
     elevator->obstructed = false;
     elevator->stop_flag = false; 
+    elevator->isIdle = false;
     elevator->last_direction = DIRN_STOP;
 
     new_queue(&(elevator->queue));
@@ -31,46 +33,7 @@ void elevator_init(Elevator *elevator) {
         elevator->last_floor = elevator->floor;
         set_direction(elevator, DIRN_STOP);
     }
-
-    
-    // Overkill. Kan gå dit første order kommer 
-    while(1) {
-        check_hall_buttons(elevator);
-        check_cab_buttons(elevator);
-
-
-        uint8_t elevator_up = 0;
-        uint8_t elevator_down = 0;
-
-        for (uint8_t order = elevator->last_floor; order < N_FLOORS; order++) {
-            if (elevator->queue.prioritized_orders[order]) {
-                elevator_up++;
-            }
-        }
-        for (uint8_t order = elevator->last_floor; order >= 0; order--) {
-            if (elevator->queue.prioritized_orders[order]) {
-                elevator_down++;
-            }
-        }
-    
-    
-        if (elevator_up == elevator_down) {
-            set_direction(elevator, DIRN_UP);
-            break;
-        }
-        else if (elevator_up == 0 && elevator_down == 0) {
-            set_direction(elevator, DIRN_STOP);
-        }
-        else if (elevator_up > elevator_down) {
-            set_direction(elevator, DIRN_UP);
-            break;
-        }
-        else {
-            set_direction(elevator, DIRN_DOWN);
-            break;
-        }
-    }
-
+    elevator->isIdle = true;
 
     printf("Init finished\n");
 };
@@ -95,7 +58,6 @@ void close_door(Elevator *elevator) {
     if (!elevio_obstruction()) {
         elevio_doorOpenLamp(0);
         elevator->door_open = false;
-        set_direction(elevator, elevator->last_direction);
     }
 };
 
@@ -135,84 +97,8 @@ void set_direction(Elevator *elevator, Direction direction) {
     }
     elevator->direction = direction;
     elevio_motorDirection(elevator->direction);
+    if(direction == DIRN_STOP){elevator->isIdle = true;}
 };
-
-
-
-
-void reprioritize_orders(Elevator *elevator) {
-    // Only proceed if we have a valid floor
-    if (elevator->last_floor < 0 || elevator->last_floor >= N_FLOORS) {
-        return;
-    }
-    
-    // Calculate initial search position
-    int8_t search_start = elevator->last_floor;
-    int8_t search_end = search_start;
-    bool found_priority_order = false;
-    
-    switch (elevator->direction) {
-    case DIRN_UP:
-        // Search upward for the next prioritized order
-        search_end = search_start;
-        for (int8_t i = search_start; i < N_FLOORS; i++) {
-            if (elevator->queue.prioritized_orders[i]) {
-                search_end = i;
-                found_priority_order = true;
-                break;
-            }
-        }
-        
-        // If no orders found above, don't change search_end
-        if (!found_priority_order) {
-            search_end = search_start;
-        }
-        break;
-    
-    case DIRN_DOWN:
-        // Search downward for the next prioritized order
-        search_end = search_start;
-        for (int8_t i = search_start; i >= 0; i--) {
-            if (elevator->queue.prioritized_orders[i]) {
-                search_end = i;
-                found_priority_order = true;
-                break;
-            }
-        }
-        
-        // If no orders found below, don't change search_end
-        if (!found_priority_order) {
-            search_end = search_start;
-        }
-        break;
-
-    case DIRN_STOP:
-        // When stopped, prioritize orders at the current floor
-        if (elevator->queue.unprioritized_orders[search_start]) {
-            elevator->queue.prioritized_orders[search_start] = true;
-            elevator->queue.unprioritized_orders[search_start] = false;
-        }
-        return;
-    }
-    
-    // Move unprioritized orders to prioritized orders between start and end
-    if (search_start <= search_end) {
-        for (int8_t i = search_start; i <= search_end; i++) {
-            if (elevator->queue.unprioritized_orders[i]) {
-                elevator->queue.prioritized_orders[i] = true;
-                elevator->queue.unprioritized_orders[i] = false;
-            }
-        }
-    } else {
-        for (int8_t i = search_start; i >= search_end; i--) {
-            if (elevator->queue.unprioritized_orders[i]) {
-                elevator->queue.prioritized_orders[i] = true;
-                elevator->queue.unprioritized_orders[i] = false;
-            }
-        }
-    }
-}
-
 
 
 
@@ -226,32 +112,96 @@ void move_elevator(Elevator *elevator) {
     //TODO: Implement move_elevator function
     // This function should move the elevator to the next floor in the queue
 
-    if (!elevator->door_open || !elevator->obstructed) {
-
-        bool is_order_in_dir = false; 
-        for (uint8_t order = elevator->last_floor; order < N_FLOORS || order > 0; order+=elevator->direction) {
-            printf("direction %d\n", elevator->direction);
-            if (elevator->queue.prioritized_orders[order]) {
-                is_order_in_dir = true;
-                break;
+    if ((!elevator->door_open || !elevator->obstructed) && elevator->isIdle) {
+        if (elevator->last_direction == DIRN_UP && elevator->last_floor != 3){
+            for (uint8_t floor = elevator->last_floor; floor < N_FLOORS; floor++){
+                if(elevator->queue.prioritized_orders[floor]){
+                    set_direction(elevator, elevator->last_direction);
+                    break;
+                }
+        }
+        }
+        else if (elevator->last_direction == DIRN_DOWN && elevator->last_floor != 0){
+            for (uint8_t floor = elevator->last_floor; floor < N_FLOORS; floor--){
+                if(elevator->queue.prioritized_orders[floor]){
+                    set_direction(elevator, elevator->last_direction);
+                    break;
+                }
             }
-            if (elevator->direction == DIRN_STOP) break;
         }
-
-        if (!is_order_in_dir) {
-            set_direction(elevator, (-1)*elevator->direction);
+        else{
+            set_direction(elevator, elevator->last_direction*(-1));
         }
-        
-
-
-
-        if (elevator->queue.prioritized_orders[elevator->last_floor]) {
-            printf("Fant etasje");
-            set_direction(elevator, DIRN_STOP);
-            open_door(elevator);
-            elevator->stop_flag = true;
-            pop_order(&elevator->queue, elevator->last_floor);
-        }
-    }
+}
 };
 
+void check_if_stop(Elevator *elevator){
+    int8_t curr_floor = elevator->floor;
+    if (curr_floor != -1){
+        if(elevator->queue.prioritized_orders[curr_floor]){
+            pop_order(&(elevator->queue), curr_floor);
+            set_direction(elevator, DIRN_STOP);
+            open_door(elevator);
+            Timer time;
+            start_timer(&time, 3);
+            reprioritize_lists(elevator);
+            while (!timer_expired(&time)) {
+                // Wait for 3 seconds
+                check_hall_buttons(elevator);
+                check_cab_buttons(elevator);
+                handle_stop_butn(elevator);
+            }
+            close_door(elevator);
+        }
+    }
+}
+
+//FEIL HER ET STED, KAN IKKE FINNE UT HVOR.
+
+void reprioritize_lists(Elevator *elevator){
+    bool no_prioritized_orders = true;
+    for (int i = 0; i < 4; i++){
+        if (elevator->queue.prioritized_orders[i]){
+            no_prioritized_orders = false;
+            break;
+        }
+    }
+    if (no_prioritized_orders){
+        for (int i = 0; i < N_FLOORS; i++){
+            elevator->queue.prioritized_orders[i] = elevator->queue.unprioritized_orders[i];
+            elevator->queue.unprioritized_orders[i] = false;
+            break;
+         }
+    }
+}
+
+
+void handle_stop_butn(Elevator *elevator){
+    Timer timer;
+    while (elevio_stopButton()) {
+        elevator->stop_flag = true;
+        elevio_stopLamp(1);
+        set_direction(elevator, DIRN_STOP);
+
+        pop_all_orders(&elevator->queue);
+
+        if (elevator->floor != -1) {
+            open_door(elevator);
+        }
+    }
+    printf("2");
+
+    elevio_stopLamp(0);
+
+    if (elevator->door_open && elevator->stop_flag) {
+        elevator->stop_flag = false;
+        start_timer(&timer, 3);
+        
+        while (!timer_expired(&timer)) {
+            // Wait for 3 seconds
+            check_hall_buttons(elevator);
+            check_cab_buttons(elevator);
+        }
+        close_door(elevator);
+    }
+}

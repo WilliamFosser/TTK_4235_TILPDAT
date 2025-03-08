@@ -17,6 +17,7 @@ typedef struct
     bool door_open; 
     bool obstructed; 
     bool stop_flag;
+    bool isIdle;
 
     Queue queue;
     
@@ -34,7 +35,12 @@ void set_direction(Elevator *elevator, Direction direction);
 
 void check_hall_buttons(Elevator *elevator);
 void check_cab_buttons(Elevator *elevator);
-void reprioritize_orders(Elevator *elevator);
-
+void reprioritize_lists(Elevator *elevator);
+void check_if_stop(Elevator *elevator);
 void move_elevator(Elevator *elevator);
 
+void check_if_floor_is_prio(Elevator *elevator);
+
+
+
+void handle_stop_butn(Elevator *elevator);
