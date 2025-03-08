@@ -156,7 +156,6 @@ void check_if_stop(Elevator *elevator){
     }
 }
 
-//FEIL HER ET STED, KAN IKKE FINNE UT HVOR.
 
 void reprioritize_lists(Elevator *elevator){
     bool no_prioritized_orders = true;
