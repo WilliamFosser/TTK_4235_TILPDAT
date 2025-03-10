@@ -39,8 +39,6 @@ void reprioritize_lists(Elevator *elevator);
 void check_if_stop(Elevator *elevator);
 void move_elevator(Elevator *elevator);
 
-void check_if_floor_is_prio(Elevator *elevator);
-
 
 
 void handle_stop_butn(Elevator *elevator);

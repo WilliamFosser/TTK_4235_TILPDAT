@@ -16,7 +16,6 @@ void elevator_init(Elevator *elevator) {
     elevator->obstructed = false;
     elevator->stop_flag = false; 
     elevator->isIdle = false;
-    elevator->last_direction = DIRN_STOP;
 
     new_queue(&(elevator->queue));
     pop_all_orders(&(elevator->queue));
@@ -34,7 +33,7 @@ void elevator_init(Elevator *elevator) {
         set_direction(elevator, DIRN_STOP);
     }
     elevator->isIdle = true;
-
+    elevator->last_direction = DIRN_DOWN;
     printf("Init finished\n");
 };
 
@@ -58,6 +57,7 @@ void close_door(Elevator *elevator) {
     if (!elevio_obstruction()) {
         elevio_doorOpenLamp(0);
         elevator->door_open = false;
+        elevator->isIdle = true;
     }
 };
 
@@ -93,6 +93,9 @@ void check_cab_buttons(Elevator *elevator) {
 
 void set_direction(Elevator *elevator, Direction direction) {
     if (direction != DIRN_STOP) {
+        elevator->isIdle = false;
+    }
+    if (elevator->direction != DIRN_STOP) {
         elevator->last_direction = elevator->direction;
     }
     elevator->direction = direction;
@@ -111,34 +114,56 @@ void set_direction(Elevator *elevator, Direction direction) {
 void move_elevator(Elevator *elevator) {
     //TODO: Implement move_elevator function
     // This function should move the elevator to the next floor in the queue
-
+    int8_t last_dirr = elevator->last_direction;
     if ((!elevator->door_open || !elevator->obstructed) && elevator->isIdle) {
-        if (elevator->last_direction == DIRN_UP && elevator->last_floor != 3){
-            for (uint8_t floor = elevator->last_floor; floor < N_FLOORS; floor++){
-                if(elevator->queue.prioritized_orders[floor]){
-                    set_direction(elevator, elevator->last_direction);
-                    break;
-                }
-        }
-        }
-        else if (elevator->last_direction == DIRN_DOWN && elevator->last_floor != 0){
-            for (uint8_t floor = elevator->last_floor; floor < N_FLOORS; floor--){
-                if(elevator->queue.prioritized_orders[floor]){
-                    set_direction(elevator, elevator->last_direction);
+        printf("Moving elevator. Last direction was %d\n. Is idle: %d\n", last_dirr, elevator->isIdle);
+        uint8_t curr_floor = elevator->floor;
+        if (curr_floor == 0 || elevator->last_direction == DIRN_UP) {
+            for (int8_t i = curr_floor; i < N_FLOORS; i++){
+                if (elevator->queue.prioritized_orders[i]){
+                    printf("Setting direction to up\n");
+                    set_direction(elevator, DIRN_UP);
                     break;
                 }
             }
         }
-        else{
-            set_direction(elevator, elevator->last_direction*(-1));
+        if (curr_floor == 3 || last_dirr == DIRN_DOWN) {
+            for (int8_t i = curr_floor; i >= 0; i--){
+                if (elevator->queue.prioritized_orders[i]){
+                    set_direction(elevator, DIRN_DOWN);
+                    printf("Setting direction to down\n");
+                    break;
+                }
+            }
         }
+        if (elevator->direction == DIRN_STOP){
+            for (int i = 0; i < 4; i++){
+                if (elevator->queue.prioritized_orders[i]){
+                    if (i > curr_floor){
+                        set_direction(elevator, DIRN_UP);
+                        printf("Setting direction to up\n");
+                    }
+                    else if (i < curr_floor){
+                        set_direction(elevator, DIRN_DOWN);
+                        printf("Setting direction to down\n");
+                    }
+                    break;
+                }
+            }
+        }
+    while (elevator->floor == curr_floor && elevator->direction != DIRN_STOP) {
+        update_floor(elevator);
+        check_if_stop(elevator);
+        check_hall_buttons(elevator);
+        check_cab_buttons(elevator);
+        handle_stop_butn(elevator);
+        }
+    };
 }
-};
-
 void check_if_stop(Elevator *elevator){
     int8_t curr_floor = elevator->floor;
     if (curr_floor != -1){
-        if(elevator->queue.prioritized_orders[curr_floor]){
+        if(elevator->queue.prioritized_orders[curr_floor] || elevator->queue.unprioritized_orders[curr_floor]){
             pop_order(&(elevator->queue), curr_floor);
             set_direction(elevator, DIRN_STOP);
             open_door(elevator);
@@ -159,18 +184,19 @@ void check_if_stop(Elevator *elevator){
 
 void reprioritize_lists(Elevator *elevator){
     bool no_prioritized_orders = true;
+    int copy_unprio[4] = {0};
     for (int i = 0; i < 4; i++){
         if (elevator->queue.prioritized_orders[i]){
             no_prioritized_orders = false;
-            break;
         }
     }
     if (no_prioritized_orders){
         for (int i = 0; i < N_FLOORS; i++){
-            elevator->queue.prioritized_orders[i] = elevator->queue.unprioritized_orders[i];
-            elevator->queue.unprioritized_orders[i] = false;
-            break;
-         }
+            if(copy_unprio[i]){
+                pop_order(&(elevator->queue), i);
+                add_order(&(elevator->queue), i, true);
+            }
+        }
     }
 }
 
