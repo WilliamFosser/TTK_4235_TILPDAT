@@ -6,35 +6,27 @@
 
 typedef MotorDirection Direction; 
 
-typedef struct
-{
-    int8_t floor; //-1 for undefined 
-    Direction direction; 
-    uint8_t last_floor; 
-    Direction last_direction; // Needed when the elevator is stopped, and is starting moving again
-    
-    bool stop_button; 
-    bool door_open; 
-    bool obstructed; 
-    bool stop_flag;
-
-    Queue queue;
-    
-} Elevator;
+typedef enum {
+    STANDBY,
+    MOVING,
+    DOOR_OPEN,
+    EMERGENCY_STOP
+} ElevatorState;
 
 
-void elevator_init(Elevator *elevator); 
-void elevator_state_machine(Elevator *elevator); 
 
 
-void update_floor(Elevator *elevator);
-void open_door(Elevator *elevator);
-void close_door(Elevator *elevator); 
-void set_direction(Elevator *elevator, Direction direction);
+void elevator_init(); 
+void elevator_state_machine(); 
 
-void check_hall_buttons(Elevator *elevator);
-void check_cab_buttons(Elevator *elevator);
-void reprioritize_orders(Elevator *elevator);
 
-void move_elevator(Elevator *elevator);
+void update_floor();
+void open_door();
+void close_door(); 
+void set_direction(Direction direction);
+
+void check_call_buttons();
+//void reprioritize_orders(Elevator *elevator);
+
+void move_elevator();
 
