@@ -18,6 +18,7 @@ typedef struct
     bool obstructed; 
     bool stop_flag;
     bool isIdle;
+    int nextFloor;
 
     Queue queue;
     
@@ -33,9 +34,7 @@ void open_door(Elevator *elevator);
 void close_door(Elevator *elevator); 
 void set_direction(Elevator *elevator, Direction direction);
 
-void check_hall_buttons(Elevator *elevator);
-void check_cab_buttons(Elevator *elevator);
-void reprioritize_lists(Elevator *elevator);
+void check_buttons(Elevator *elevator);
 void check_if_stop(Elevator *elevator);
 void move_elevator(Elevator *elevator);
 

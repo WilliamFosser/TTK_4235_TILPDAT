@@ -16,6 +16,7 @@ void elevator_init(Elevator *elevator) {
     elevator->obstructed = false;
     elevator->stop_flag = false; 
     elevator->isIdle = false;
+    elevator->nextFloor = -1;
 
     new_queue(&(elevator->queue));
     pop_all_orders(&(elevator->queue));
@@ -54,6 +55,15 @@ void open_door(Elevator *elevator) {
 
 
 void close_door(Elevator *elevator) {
+    while(elevio_obstruction()){
+        Timer time;
+        start_timer(&time, 1);
+        while (!timer_expired(&time)) {
+                printf("Obstructed\n");
+                check_buttons(elevator);
+                handle_stop_butn(elevator);
+        }
+    }
     if (!elevio_obstruction()) {
         elevio_doorOpenLamp(0);
         elevator->door_open = false;
@@ -63,14 +73,12 @@ void close_door(Elevator *elevator) {
 
 
 // Check if any hall buttons are pressed and update the button lamps and the elevator queue
-void check_hall_buttons(Elevator *elevator) {
-    bool is_cab_order = false;
+void check_buttons(Elevator *elevator) {
     for(int floor = 0; floor < N_FLOORS; floor++){
-        for(int button = 0; button < N_BUTTONS-1; button++){ // N_BUTTONS-1 = Exclude cab button
+        for(int button = 0; button < N_BUTTONS; button++){ 
             int buttonPressed = elevio_callButton(floor, button);
-            
             if (buttonPressed) {
-                add_order(&(elevator->queue), floor, is_cab_order);
+                add_order(&(elevator->queue), floor, button);
                 elevio_buttonLamp(floor, button, 1);
             }
         }
@@ -78,17 +86,6 @@ void check_hall_buttons(Elevator *elevator) {
 }; 
 
 
-void check_cab_buttons(Elevator *elevator) {
-    bool is_cab_order = true;
-    for(int floor = 0; floor < N_FLOORS; floor++) {
-        int buttonPressed = elevio_callButton(floor, BUTTON_CAB);
-
-        if (buttonPressed) {
-            elevio_buttonLamp(floor, BUTTON_CAB, 1);
-            add_order(&(elevator->queue), floor, is_cab_order);
-        }
-    }
-};
 
 
 void set_direction(Elevator *elevator, Direction direction) {
@@ -105,7 +102,6 @@ void set_direction(Elevator *elevator, Direction direction) {
 
 
 
-
 //==============================================================================
 //============================== Direction Algorithm ===========================
 //==============================================================================
@@ -116,46 +112,59 @@ void move_elevator(Elevator *elevator) {
     // This function should move the elevator to the next floor in the queue
     int8_t last_dirr = elevator->last_direction;
     if ((!elevator->door_open || !elevator->obstructed) && elevator->isIdle) {
+        if (elevator->floor == -1){
+            elevator_init(elevator);
+        }
         printf("Moving elevator. Last direction was %d\n. Is idle: %d\n", last_dirr, elevator->isIdle);
         uint8_t curr_floor = elevator->floor;
+        Direction setDir = DIRN_STOP;
+        bool hasChanged = false;
         if (curr_floor == 0 || elevator->last_direction == DIRN_UP) {
             for (int8_t i = curr_floor; i < N_FLOORS; i++){
-                if (elevator->queue.prioritized_orders[i]){
-                    printf("Setting direction to up\n");
-                    set_direction(elevator, DIRN_UP);
-                    break;
+                if (elevator->queue.orders[i] != &(elevator->queue.order_type[3])){
+                    if(*(elevator->queue.orders[i]) == 0 || *(elevator->queue.orders[i]) == 1){
+                        elevator->nextFloor = i;
+                        setDir = DIRN_UP;
+                        hasChanged = true;
+                    }
                 }
             }
         }
-        if (curr_floor == 3 || last_dirr == DIRN_DOWN) {
+        if(curr_floor == 3 || last_dirr == DIRN_DOWN) {
             for (int8_t i = curr_floor; i >= 0; i--){
-                if (elevator->queue.prioritized_orders[i]){
-                    set_direction(elevator, DIRN_DOWN);
-                    printf("Setting direction to down\n");
-                    break;
+                if (elevator->queue.orders[i] != &(elevator->queue.order_type[3])){
+                    if(*(elevator->queue.orders[i]) == 0 || *(elevator->queue.orders[i]) == -1){
+                        elevator->nextFloor = i;
+                        setDir = DIRN_DOWN;
+                        hasChanged = true;
+                    }
                 }
             }
         }
-        if (elevator->direction == DIRN_STOP){
+        if(!hasChanged) {
             for (int i = 0; i < 4; i++){
-                if (elevator->queue.prioritized_orders[i]){
+                if (elevator->queue.orders[i] != &(elevator->queue.order_type[3])){
                     if (i > curr_floor){
-                        set_direction(elevator, DIRN_UP);
-                        printf("Setting direction to up\n");
-                    }
+                        elevator->last_direction = DIRN_UP;
+                        elevator->nextFloor = i;
+                        setDir = DIRN_UP;
+                        printf("Going up\n");
+                    }   
                     else if (i < curr_floor){
-                        set_direction(elevator, DIRN_DOWN);
-                        printf("Setting direction to down\n");
+                        elevator->last_direction = DIRN_DOWN;
+                        elevator->nextFloor = i;
+                        setDir = DIRN_DOWN;
+                        printf("Going down\n");
                     }
                     break;
                 }
             }
         }
+        set_direction(elevator, setDir);
     while (elevator->floor == curr_floor && elevator->direction != DIRN_STOP) {
         update_floor(elevator);
         check_if_stop(elevator);
-        check_hall_buttons(elevator);
-        check_cab_buttons(elevator);
+        check_buttons(elevator);
         handle_stop_butn(elevator);
         }
     };
@@ -163,48 +172,36 @@ void move_elevator(Elevator *elevator) {
 void check_if_stop(Elevator *elevator){
     int8_t curr_floor = elevator->floor;
     if (curr_floor != -1){
-        if(elevator->queue.prioritized_orders[curr_floor] || elevator->queue.unprioritized_orders[curr_floor]){
-            pop_order(&(elevator->queue), curr_floor);
-            set_direction(elevator, DIRN_STOP);
-            open_door(elevator);
-            Timer time;
-            start_timer(&time, 3);
-            reprioritize_lists(elevator);
-            while (!timer_expired(&time)) {
-                // Wait for 3 seconds
-                check_hall_buttons(elevator);
-                check_cab_buttons(elevator);
-                handle_stop_butn(elevator);
-            }
-            close_door(elevator);
-        }
-    }
-}
-
-
-void reprioritize_lists(Elevator *elevator){
-    bool no_prioritized_orders = true;
-    int copy_unprio[4] = {0};
-    for (int i = 0; i < 4; i++){
-        if (elevator->queue.prioritized_orders[i]){
-            no_prioritized_orders = false;
-        }
-    }
-    if (no_prioritized_orders){
-        for (int i = 0; i < N_FLOORS; i++){
-            if(copy_unprio[i]){
-                pop_order(&(elevator->queue), i);
-                add_order(&(elevator->queue), i, true);
+        if(elevator->queue.orders[curr_floor] != &(elevator->queue.order_type[3])){
+            if(*(elevator->queue.orders[curr_floor]) == 0 || *(elevator->queue.orders[curr_floor]) == elevator->direction || elevator->nextFloor == curr_floor){
+                pop_order(&(elevator->queue), curr_floor);
+                set_direction(elevator, DIRN_STOP);
+                open_door(elevator);
+                Timer time;
+                start_timer(&time, 3);
+                while (!timer_expired(&time)) {
+                    // Wait for 3 seconds
+                    check_buttons(elevator);
+                    handle_stop_butn(elevator);
+                }
+                close_door(elevator);
             }
         }
     }
-}
+};
+
 
 
 void handle_stop_butn(Elevator *elevator){
     Timer timer;
-    while (elevio_stopButton()) {
+    elevator->stop_flag = false;
+    if (elevio_stopButton()) {
         elevator->stop_flag = true;
+        Timer delay;
+        start_timer(&delay, 1);
+        while (!timer_expired(&delay));
+    }
+    while (elevator->stop_flag) {
         elevio_stopLamp(1);
         set_direction(elevator, DIRN_STOP);
 
@@ -212,6 +209,9 @@ void handle_stop_butn(Elevator *elevator){
 
         if (elevator->floor != -1) {
             open_door(elevator);
+        }
+        if(elevio_stopButton()){
+            elevator->stop_flag = false;
         }
     }
     printf("2");
@@ -224,8 +224,8 @@ void handle_stop_butn(Elevator *elevator){
         
         while (!timer_expired(&timer)) {
             // Wait for 3 seconds
-            check_hall_buttons(elevator);
-            check_cab_buttons(elevator);
+            check_buttons(elevator);
+            handle_stop_butn(elevator);
         }
         close_door(elevator);
     }
