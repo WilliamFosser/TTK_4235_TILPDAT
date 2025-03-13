@@ -40,11 +40,6 @@ int main() {
 
     }
 
-    
-    elevator_init();
-    elevator_state_machine();
-
-
     printf("=== Elevator shutting down ===\n");
 
     return 0;
