@@ -6,8 +6,7 @@
 
 typedef struct 
 {
-    int* orders[4];
-    int order_type[4];
+    bool orders[4][3];
 } Queue;
 
 

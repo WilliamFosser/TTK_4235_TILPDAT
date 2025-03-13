@@ -13,12 +13,12 @@ void elevator_init(Elevator *elevator) {
     elevator->direction = DIRN_STOP;
     elevator->stop_button = false;
     elevator->door_open = false;
-    elevator->obstructed = false;
-    elevator->stop_flag = false; 
+    elevator->obstructed = false; 
     elevator->isIdle = false;
     elevator->nextFloor = -1;
+    elevator->stopFlag = false;
+    elevio_doorOpenLamp(0);
 
-    new_queue(&(elevator->queue));
     pop_all_orders(&(elevator->queue));
 
     if (elevio_floorSensor() != -1) {
@@ -35,6 +35,7 @@ void elevator_init(Elevator *elevator) {
     }
     elevator->isIdle = true;
     elevator->last_direction = DIRN_DOWN;
+    elevio_floorIndicator(elevio_floorSensor());
     printf("Init finished\n");
 };
 
@@ -56,15 +57,17 @@ void open_door(Elevator *elevator) {
 
 void close_door(Elevator *elevator) {
     while(elevio_obstruction()){
-        Timer time;
-        start_timer(&time, 1);
-        while (!timer_expired(&time)) {
-                printf("Obstructed\n");
-                check_buttons(elevator);
-                handle_stop_butn(elevator);
-        }
+        check_buttons(elevator);
+        handle_stop_butn(elevator);
     }
     if (!elevio_obstruction()) {
+        Timer timer;
+        start_timer(&timer, 3);
+        while (!timer_expired(&timer)) {
+            // Wait for 3 seconds
+            check_buttons(elevator);
+            handle_stop_butn(elevator);
+        }
         elevio_doorOpenLamp(0);
         elevator->door_open = false;
         elevator->isIdle = true;
@@ -88,16 +91,18 @@ void check_buttons(Elevator *elevator) {
 
 
 
-void set_direction(Elevator *elevator, Direction direction) {
+void set_direction(Elevator *elevator, Direction direction) { //Sets motor direction and updates bool isIdle
     if (direction != DIRN_STOP) {
         elevator->isIdle = false;
+    }
+    else{
+        elevator->isIdle = true;
     }
     if (elevator->direction != DIRN_STOP) {
         elevator->last_direction = elevator->direction;
     }
     elevator->direction = direction;
     elevio_motorDirection(elevator->direction);
-    if(direction == DIRN_STOP){elevator->isIdle = true;}
 };
 
 
@@ -107,126 +112,131 @@ void set_direction(Elevator *elevator, Direction direction) {
 //==============================================================================
 
 
-void move_elevator(Elevator *elevator) {
+Direction move_elevator(Elevator *elevator) {
     //TODO: Implement move_elevator function
     // This function should move the elevator to the next floor in the queue
-    int8_t last_dirr = elevator->last_direction;
-    if ((!elevator->door_open || !elevator->obstructed) && elevator->isIdle) {
-        if (elevator->floor == -1){
-            elevator_init(elevator);
-        }
-        printf("Moving elevator. Last direction was %d\n. Is idle: %d\n", last_dirr, elevator->isIdle);
-        uint8_t curr_floor = elevator->floor;
-        Direction setDir = DIRN_STOP;
-        bool hasChanged = false;
-        if (curr_floor == 0 || elevator->last_direction == DIRN_UP) {
-            for (int8_t i = curr_floor; i < N_FLOORS; i++){
-                if (elevator->queue.orders[i] != &(elevator->queue.order_type[3])){
-                    if(*(elevator->queue.orders[i]) == 0 || *(elevator->queue.orders[i]) == 1){
-                        elevator->nextFloor = i;
-                        setDir = DIRN_UP;
-                        hasChanged = true;
-                    }
-                }
-            }
-        }
-        if(curr_floor == 3 || last_dirr == DIRN_DOWN) {
-            for (int8_t i = curr_floor; i >= 0; i--){
-                if (elevator->queue.orders[i] != &(elevator->queue.order_type[3])){
-                    if(*(elevator->queue.orders[i]) == 0 || *(elevator->queue.orders[i]) == -1){
-                        elevator->nextFloor = i;
-                        setDir = DIRN_DOWN;
-                        hasChanged = true;
-                    }
-                }
-            }
-        }
-        if(!hasChanged) {
-            for (int i = 0; i < 4; i++){
-                if (elevator->queue.orders[i] != &(elevator->queue.order_type[3])){
-                    if (i > curr_floor){
-                        elevator->last_direction = DIRN_UP;
-                        elevator->nextFloor = i;
-                        setDir = DIRN_UP;
-                        printf("Going up\n");
-                    }   
-                    else if (i < curr_floor){
-                        elevator->last_direction = DIRN_DOWN;
-                        elevator->nextFloor = i;
-                        setDir = DIRN_DOWN;
-                        printf("Going down\n");
-                    }
-                    break;
-                }
-            }
-        }
-        set_direction(elevator, setDir);
-    while (elevator->floor == curr_floor && elevator->direction != DIRN_STOP) {
-        update_floor(elevator);
-        check_if_stop(elevator);
-        check_buttons(elevator);
-        handle_stop_butn(elevator);
-        }
-    };
-}
-void check_if_stop(Elevator *elevator){
-    int8_t curr_floor = elevator->floor;
-    if (curr_floor != -1){
-        if(elevator->queue.orders[curr_floor] != &(elevator->queue.order_type[3])){
-            if(*(elevator->queue.orders[curr_floor]) == 0 || *(elevator->queue.orders[curr_floor]) == elevator->direction || elevator->nextFloor == curr_floor){
-                pop_order(&(elevator->queue), curr_floor);
-                set_direction(elevator, DIRN_STOP);
-                open_door(elevator);
-                Timer time;
-                start_timer(&time, 3);
-                while (!timer_expired(&time)) {
-                    // Wait for 3 seconds
-                    check_buttons(elevator);
-                    handle_stop_butn(elevator);
-                }
-                close_door(elevator);
-            }
-        }
+    if (elevator->direction != DIRN_STOP) {
+        return elevator->direction;
     }
-};
+    if (elevator->stopFlag) {
+        return DIRN_STOP;
+    }
+    int8_t last_dirr = elevator->last_direction;
+    switch (last_dirr){
+        case DIRN_UP:
+            for (int i = elevator->floor; i < 4; i++){
+                    if (elevator->queue.orders[i][BUTTON_HALL_UP] || elevator->queue.orders[i][BUTTON_CAB]){
+                        return DIRN_UP;
+                    }
+                }
+            for (int i = 0; i < 4;i++){
+                for (int j = 0; j < 3; j++){
+                    if (elevator->queue.orders[i][j]){
+                        if (i < elevator->floor){
+                            return DIRN_DOWN;
+                        }
+                        else{
+                            return DIRN_UP;
+                        }
+                    }
+                }
+            }
+            return DIRN_STOP;
+            break;
+        case DIRN_DOWN:
+            for (int i = elevator->floor; i >= 0; i--){
+                    if (elevator->queue.orders[i][BUTTON_HALL_DOWN] || elevator->queue.orders[i][BUTTON_CAB]){
+                        return DIRN_DOWN;
+                    }
+                }
+            for (int i = 0; i < 4; i++){
+                for (int j = 0; j < 3; j++){
+                    if (elevator->queue.orders[i][j]){
+                        if (i < elevator->floor){
+                            return DIRN_DOWN;
+                        }
+                        else{
+                            return DIRN_UP;
+                        }
+                    }
+                }
+            }
+            return DIRN_STOP;
+            break;
+        default:
+                return DIRN_STOP;
+                break;
+    }
+}
 
+bool check_if_stop(Elevator *elevator) {
+    if (elevator->floor == -1) {
+        return false;
+    }
+    if (elevator->direction == DIRN_UP && elevator->floor == 3) { //Prevent out of bounds top
+        return true;
+    }
+    if (elevator->direction == DIRN_DOWN && elevator->floor == 0) { //Prevent out of bounds bottom
+        return true;
+    }
+    int8_t lastOrder = 0;
+    switch (elevator->direction) {
+    case (DIRN_UP):
+        if (elevator->queue.orders[elevator->floor][BUTTON_HALL_UP] || elevator->queue.orders[elevator->floor][BUTTON_CAB]) {
+            return true;
+    }
+    case (DIRN_DOWN):
+        if (elevator->queue.orders[elevator->floor][BUTTON_HALL_DOWN] || elevator->queue.orders[elevator->floor][BUTTON_CAB]) {
+            return true;
+        }
+    default:
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (elevator->queue.orders[i][j]) {
+                    lastOrder++;
+                }
+            }
+        }
+        if (lastOrder == 1) {
+            for (int8_t btn = 0; btn < 3; btn++) {
+                if (elevator->queue.orders[elevator->floor][btn]) {
+                    return true;
+                }
+            }
+        }
+    return false;
+    }
+}
 
+void stop_elevator(Elevator *elevator){
+    pop_order(&(elevator->queue), elevator->floor);
+    set_direction(elevator, DIRN_STOP);
+    open_door(elevator);
+    close_door(elevator);
+}
 
 void handle_stop_butn(Elevator *elevator){
-    Timer timer;
-    elevator->stop_flag = false;
-    if (elevio_stopButton()) {
-        elevator->stop_flag = true;
-        Timer delay;
-        start_timer(&delay, 1);
-        while (!timer_expired(&delay));
-    }
-    while (elevator->stop_flag) {
-        elevio_stopLamp(1);
+    if (elevio_stopButton()){
+        elevator->stopFlag = true;
+        pop_all_orders(&(elevator->queue));
         set_direction(elevator, DIRN_STOP);
-
-        pop_all_orders(&elevator->queue);
-
-        if (elevator->floor != -1) {
+        elevio_stopLamp(1); 
+        if (elevio_floorSensor() != -1){
             open_door(elevator);
         }
-        if(elevio_stopButton()){
-            elevator->stop_flag = false;
-        }
     }
-    printf("2");
-
+    else{
+        return;
+    }
+    while (elevio_stopButton()){
+        printf("Stop button down\n");
+    }
+    elevator->stopFlag = false;
     elevio_stopLamp(0);
-
-    if (elevator->door_open && elevator->stop_flag) {
-        elevator->stop_flag = false;
-        start_timer(&timer, 3);
-        
-        while (!timer_expired(&timer)) {
-            // Wait for 3 seconds
-            check_buttons(elevator);
-            handle_stop_butn(elevator);
-        }
+    if (elevio_floorSensor()==1){
+        set_direction(elevator, DIRN_DOWN);
+    }
+    if (elevator->door_open) {
         close_door(elevator);
     }
 }

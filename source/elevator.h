@@ -15,19 +15,20 @@ typedef struct
     
     bool stop_button; 
     bool door_open; 
-    bool obstructed; 
-    bool stop_flag;
+    bool obstructed;
     bool isIdle;
     int nextFloor;
+    bool stopFlag;
 
-    Queue queue;
-    
+    Queue queue; // [4][3] array of orders
+    // if ordre i andre etasje, cab: if queue[1][2]==True do th
 } Elevator;
 
 
 void elevator_init(Elevator *elevator); 
 void elevator_state_machine(Elevator *elevator); 
-
+bool check_if_stop(Elevator *elevator);
+void stop_elevator(Elevator *elevator);
 
 void update_floor(Elevator *elevator);
 void open_door(Elevator *elevator);
@@ -35,8 +36,7 @@ void close_door(Elevator *elevator);
 void set_direction(Elevator *elevator, Direction direction);
 
 void check_buttons(Elevator *elevator);
-void check_if_stop(Elevator *elevator);
-void move_elevator(Elevator *elevator);
+Direction move_elevator(Elevator *elevator);
 
 
 
