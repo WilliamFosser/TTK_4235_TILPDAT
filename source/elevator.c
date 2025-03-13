@@ -68,9 +68,11 @@ void close_door(Elevator *elevator) { //Turns on door lamp, sets door_open to tr
             check_buttons(elevator);
             handle_stop_butn(elevator);
         }
-        elevio_doorOpenLamp(0);
-        elevator->door_open = false;
-        elevator->isIdle = true;
+    }
+    if(!elevio_obstruction()){
+            elevio_doorOpenLamp(0);
+            elevator->door_open = false;
+            elevator->isIdle = true;
     }
 };
 
