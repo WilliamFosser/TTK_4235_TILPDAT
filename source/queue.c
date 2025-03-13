@@ -41,6 +41,16 @@ void add_order(uint8_t floor, ButtonType button) {
         break;
     }
 }
+
+// Product spesification specifies that when the elevator stops at a floor, all orders at that floor should be cleared. 
+// (all persons should leave the elevator, and all persons waiting at the floor should enter the elevator)
+// This function is called when the elevator stops at a floor.
+static void clear_floor_lamps(uint8_t floor) {
+    elevio_buttonLamp(floor, BUTTON_HALL_DOWN, 0);
+    elevio_buttonLamp(floor, BUTTON_HALL_UP, 0);
+    elevio_buttonLamp(floor, BUTTON_CAB, 0);
+}
+
     
 // Product spesification specifies that when the elevator stops at a floor, all orders at that floor should be cleared. 
 // (all persons should leave the elevator, and all persons waiting at the floor should enter the elevator)
@@ -61,20 +71,12 @@ void pop_all_orders() {
 }
 
 
-// Product spesification specifies that when the elevator stops at a floor, all orders at that floor should be cleared. 
-// (all persons should leave the elevator, and all persons waiting at the floor should enter the elevator)
-// This function is called when the elevator stops at a floor.
-static void clear_floor_lamps(uint8_t floor) {
-    elevio_buttonLamp(floor, BUTTON_HALL_DOWN, 0);
-    elevio_buttonLamp(floor, BUTTON_HALL_UP, 0);
-    elevio_buttonLamp(floor, BUTTON_CAB, 0);
-}
 
 
-bool orders_in_direction(Direction direction, uint8_t floor) {
+bool orders_in_direction(Direction direction, uint8_t elevator_floor) {
     switch (direction) {
     case DIRN_UP:
-        for (int order = floor; order < N_FLOORS; order++) {
+        for (int order = elevator_floor; order < N_FLOORS; order++) {
             if (queue.cab_orders[order]     || 
                 queue.hall_up_orders[order] || 
                 queue.hall_down_orders[order]) {
@@ -83,7 +85,7 @@ bool orders_in_direction(Direction direction, uint8_t floor) {
         }
         break;
     case DIRN_DOWN:
-        for (int order = floor; order >= 0; order--) {
+        for (int order = elevator_floor; order >= 0; order--) {
             if (queue.cab_orders[order]     || 
                 queue.hall_up_orders[order] || 
                 queue.hall_down_orders[order]) {
@@ -99,7 +101,7 @@ bool orders_in_direction(Direction direction, uint8_t floor) {
 }
 
 
-bool is_order_opposite_direction(Direction direction, uint8_t floor) {
+bool order_in_opposite_direction(Direction direction, uint8_t floor) {
     switch (direction) {
     case DIRN_UP:
         if (queue.hall_down_orders[floor]) {
@@ -114,6 +116,27 @@ bool is_order_opposite_direction(Direction direction, uint8_t floor) {
     default:
         printf("Error: Invalid direction\n");
         break;
+    }
+    return false;
+}
+
+
+bool queue_empty() {
+    for (int floor = 0; floor < N_FLOORS; floor++) {
+        if (queue.cab_orders[floor]     || 
+            queue.hall_up_orders[floor] || 
+            queue.hall_down_orders[floor]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool order_at_floor(uint8_t floor) {
+    if (queue.cab_orders[floor]     || 
+        queue.hall_up_orders[floor] || 
+        queue.hall_down_orders[floor]) {
+        return true;
     }
     return false;
 }

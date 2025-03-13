@@ -9,11 +9,11 @@ typedef MotorDirection Direction;
 typedef enum {
     STANDBY,
     MOVING,
+    MOVING_ON_FLOOR,
     DOOR_OPEN,
-    EMERGENCY_STOP
+    OBSTRUCTED,
+    STOPPED,
 } ElevatorState;
-
-
 
 
 void elevator_init(); 
@@ -24,9 +24,6 @@ void update_floor();
 void open_door();
 void close_door(); 
 void set_direction(Direction direction);
-
 void check_call_buttons();
-//void reprioritize_orders(Elevator *elevator);
 
-void move_elevator();
 

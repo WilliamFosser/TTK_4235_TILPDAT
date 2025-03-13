@@ -2,8 +2,8 @@
 EXECUTABLE  = elevator
 
 COMPILER    = clang
-CFLAGS      = -Wall -g -std=gnu11 -fsanitize=address -Werror
-LDFLAGS     = -fsanitize=address
+CFLAGS      = -Wall -g -std=gnu11 -fsanitize=address -Werror -Wextra
+LDFLAGS     = -fsanitize=address -O2
 EXCLUDE     = '*test*'
 
 

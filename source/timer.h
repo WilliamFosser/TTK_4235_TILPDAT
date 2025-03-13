@@ -1,5 +1,6 @@
 #pragma once
 #include <time.h>
+#include <stdbool.h>
 
 
 // Starts a timer with a given duration in seconds

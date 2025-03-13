@@ -6,17 +6,16 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include "driver/elevio.h"
+#include "driver/con_load.h"
 
 #include "timer.h"
 #include "elevator.h"
 
 
-
-
 int main() {
 
-    uint32_t loop_rate_ms;
-    con_load("elevator.con", con_val("loop_rate_ms", &loop_rate_ms, "%d"));
+    uint32_t loop_rate_ms = 10;
+    //con_load("source/elevator.con", con_val("loop_rate_ms", &loop_rate_ms, "%d"));
     
     printf("elevator.con loaded\n\n");
     printf("Loop rate: %d ms\n", loop_rate_ms);
@@ -29,6 +28,10 @@ int main() {
     while(1) {
         update_floor();
         check_call_buttons();
+        
+       
+
+        elevator_state_machine();
 
 
 
@@ -39,7 +42,7 @@ int main() {
 
     
     elevator_init();
-    elevator_state_machine(&elevator);
+    elevator_state_machine();
 
 
     printf("=== Elevator shutting down ===\n");
