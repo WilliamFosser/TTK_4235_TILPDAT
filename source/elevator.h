@@ -20,12 +20,11 @@ typedef struct
     int nextFloor;
     bool stopFlag;
 
-    Queue queue; // [4][3] array of orders
-    // if ordre i andre etasje, cab: if queue[1][2]==True do th
+    Queue queue; //[Floor][ButtonType], ButtonType = {BUTTON_HALL_UP, BUTTON_HALL_DOWN, BUTTON_CAB}
 } Elevator;
 
 
-void elevator_init(Elevator *elevator); 
+void elevator_init(Elevator *elevator); //Sets up the elevator and moves down to next floor below if not at a floor
 void elevator_state_machine(Elevator *elevator); 
 bool check_if_stop(Elevator *elevator);
 void stop_elevator(Elevator *elevator);

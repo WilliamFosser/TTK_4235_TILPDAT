@@ -6,7 +6,7 @@
 
 typedef struct 
 {
-    bool orders[4][3];
+    bool orders[4][3]; //[Floor][ButtonType], ButtonType = {BUTTON_HALL_UP, BUTTON_HALL_DOWN, BUTTON_CAB}
 } Queue;
 
 
