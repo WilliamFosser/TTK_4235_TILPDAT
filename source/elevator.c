@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <time.h>
+#include <unistd.h>
 
 
 typedef struct
@@ -15,6 +16,8 @@ typedef struct
     Direction last_direction;   // Needed when the elevator is stopped, and is starting moving again
 
     ElevatorState state;
+    bool door_open;
+    int last_floor;
 
 } Elevator;
 
@@ -24,6 +27,8 @@ static Elevator elevator = {
     .direction = DIRN_STOP,
     .last_direction = DIRN_STOP,
     .state = STANDBY,
+    .door_open = false,
+    .last_floor = -1,
 };
 
 
@@ -40,7 +45,6 @@ void elevator_init() {
         set_direction(DIRN_STOP);
         elevio_floorIndicator(elevator.floor);
     }
-
     printf("Init finished\n");
 };
 
@@ -50,20 +54,25 @@ void update_floor() {
     elevator.floor = elevio_floorSensor();
     if (elevator.floor != -1 && last_floor != elevator.floor) {
         elevio_floorIndicator(elevator.floor);
+        elevator.last_floor = elevator.floor;
     }
     last_floor = elevator.floor;
 }
 
 
 void open_door() {
+    set_direction(DIRN_STOP);
     elevator.state = DOOR_OPEN; // Håndtere døråpning i state machine? FJERNE DOOR_OPEN FRA ELEVATOR?
+    elevator.door_open = true;
+    //elevio_doorOpenLamp(1);
 };
 
-// Need rewrite
 void close_door() {
     if (!elevio_obstruction()) {
         elevio_doorOpenLamp(0);
         // Set direction to last direction?
+        set_direction(elevator.last_direction);
+        elevator.door_open = false;
     }
 };
 
@@ -74,6 +83,7 @@ void check_call_buttons() {
             
             if (buttonPressed) {
                 add_order(floor, button);
+                print_queue();
                 elevio_buttonLamp(floor, button, 1);
             }
         }
@@ -114,31 +124,25 @@ static Direction opposite_direction(Direction direction) {
 
 
 
-
-
 void elevator_state_machine() {
 
     printf("Current state: %d\n", elevator.state);
-    printf("Current floor: %d\n", elevator.floor);
-    printf("Current direction: %d\n", elevator.direction);
+    //printf("Current floor: %d\n", elevator.floor);
+    //printf("Current direction: %d\n", elevator.direction);
 
-    if (queue_empty()) {
-        elevator.state = STANDBY;
-    }
 
     if (elevio_stopButton()) {
         elevator.state = STOPPED;
     }
 
-
     switch (elevator.state) {
         case STANDBY:
-        set_direction(DIRN_STOP);
-            if (orders_in_direction(DIRN_UP, elevator.floor)) {
+            set_direction(DIRN_STOP);
+            if (more_orders_in_direction(DIRN_UP, elevator.floor)) {
                 set_direction(DIRN_UP);
                 elevator.state = MOVING;
-            }
-            else if (orders_in_direction(DIRN_DOWN, elevator.floor)) {
+            } 
+            else if (more_orders_in_direction(DIRN_DOWN, elevator.floor)) {
                 set_direction(DIRN_DOWN);
                 elevator.state = MOVING;
             }
@@ -146,51 +150,91 @@ void elevator_state_machine() {
                 set_direction(DIRN_STOP);
             }
             break;
+
         case MOVING:
-            if (!reached_end() && orders_in_direction(elevator.direction, elevator.floor)) {
-                if (order_at_floor(elevator.floor) && 
-                    !order_in_opposite_direction(elevator.direction, elevator.floor)) {
+            if (!reached_end()) {
+                if (order_at_floor(elevator.floor) && order_in_direction(elevator.direction, elevator.floor)) {
+                    pop_order(elevator.floor);
+                    elevator.state = DOOR_OPEN;
+                }
+                else if (!more_orders_in_direction(elevator.direction, elevator.last_floor)) {
+                    if (more_orders_in_direction(opposite_direction(elevator.direction), elevator.last_floor)) {
+                        set_direction(opposite_direction(elevator.direction));
+                    }
+                    else {
+                        set_direction(DIRN_STOP);
+                        elevator.state = STANDBY;
+                    }
+                }
+            }
+            else { // Heisen har nådd en ende
+                if (order_at_floor(elevator.floor)) {
                     pop_order(elevator.floor);
                     open_door();
                 }
-            else if (reached_end() || !orders_in_direction(elevator.direction, elevator.floor)) {
-                if (order_in_opposite_direction(elevator.direction, elevator.floor)) {
-                    set_direction(opposite_direction(elevator.direction));;
+                else if (more_orders_in_direction(opposite_direction(elevator.direction), elevator.last_floor)) {
+                    set_direction(opposite_direction(elevator.direction));
                 }
                 else {
+                    set_direction(DIRN_STOP);
                     elevator.state = STANDBY;
-                } 
-            }
-            }
-            break;
-        case DOOR_OPEN:
-            elevio_doorOpenLamp(1);
-            if (elevio_obstruction()) {
-                // Loops until obstruction is removed
-            }
-            else {
-                start_timer(3);
-                if (timer_expired()) {
-                    close_door();
-                    elevator.state = MOVING; // sette direction til last direction?
                 }
             }
             break;
-        case STOPPED:
-            set_direction(DIRN_STOP);
-            if (elevator.floor != -1) {
+
+        case DOOR_OPEN: {
+            static bool timer_active = false;
+            if (!elevator.door_open) {
                 open_door();
             }
-            while (elevio_stopButton()) {
-                // Wait for stop button to be released
-                start_timer(3);
-                elevio_stopLamp(1);
+            // Dersom det er hindring (f.eks. en person i døråpningen), nullstill timeren
+            if (elevio_obstruction()) {
+                timer_active = false;
+                break;
             }
-            pop_all_orders();
-            elevator.state = STANDBY;
+            // Sørg for at dørlampen er på dersom etasjen er definert
+            if (elevator.floor != -1) {
+                elevio_doorOpenLamp(1);
+            }
+            // Start timeren dersom den ikke allerede er aktiv
+            if (!timer_active) {
+                start_timer(3);
+                timer_active = true;
+            }
+            // Når timeren utløper, lukk døren og fortsett bevegelse
+            if (timer_expired()) {
+                close_door();
+                elevator.state = MOVING;
+                timer_active = false;
+            }
             break;
+        }
+
+        case STOPPED:
+            set_direction(DIRN_STOP);
+            // Ved stopp skal døren åpnes dersom heisen er i en etasje (D3, S7)
+            if (elevator.floor != -1) {
+                elevio_doorOpenLamp(1);
+                open_door();
+            }
+            // Vent til stoppknappen slippes, og sørg for at stopplyset er tent mens knappen trykkes (S6)
+            elevio_stopLamp(1);
+            while (elevio_stopButton()) {
+                usleep(10000);
+            }
+            // Slett alle ubetjente bestillinger (S5)
+            pop_all_orders();
+            elevio_stopLamp(0);
+            if (elevator.floor != -1) {
+                elevator.state = DOOR_OPEN;
+            }
+            else {
+                elevator.state = STANDBY;
+            }
+
+            break;
+            
         default:
             break;
-        
     }
 }

@@ -73,22 +73,24 @@ void pop_all_orders() {
 
 
 
-bool orders_in_direction(Direction direction, uint8_t elevator_floor) {
+bool more_orders_in_direction(Direction direction, uint8_t elevator_floor) {
     switch (direction) {
     case DIRN_UP:
-        for (int order = elevator_floor; order < N_FLOORS; order++) {
+        for (int order = elevator_floor + direction; order < N_FLOORS; order++) {
             if (queue.cab_orders[order]     || 
                 queue.hall_up_orders[order] || 
                 queue.hall_down_orders[order]) {
+                printf("Orders in direction up\n");
                 return true;
             }
         }
         break;
     case DIRN_DOWN:
-        for (int order = elevator_floor; order >= 0; order--) {
+        for (int order = elevator_floor + direction; order >= 0; order--) {
             if (queue.cab_orders[order]     || 
                 queue.hall_up_orders[order] || 
                 queue.hall_down_orders[order]) {
+                printf("Orders in direction down\n");
                 return true;
             }
         }
@@ -101,15 +103,18 @@ bool orders_in_direction(Direction direction, uint8_t elevator_floor) {
 }
 
 
-bool order_in_opposite_direction(Direction direction, uint8_t floor) {
+bool order_in_direction(Direction direction, uint8_t floor) {
+    if (queue.cab_orders[floor]) {
+        return true;
+    }
     switch (direction) {
     case DIRN_UP:
-        if (queue.hall_down_orders[floor]) {
+        if (queue.hall_up_orders[floor]) {
             return true;
         }
         break;
     case DIRN_DOWN:
-        if (queue.hall_up_orders[floor]) {
+        if (queue.hall_down_orders[floor]) {
             return true;
         }
         break;
@@ -139,4 +144,21 @@ bool order_at_floor(uint8_t floor) {
         return true;
     }
     return false;
+}
+
+
+
+void print_queue() {
+    printf("\n----- ELEVATOR QUEUE STATUS -----\n");
+    printf("Floor | Cab | Hall Up | Hall Down\n");
+    printf("-------------------------------\n");
+    
+    for (int floor = N_FLOORS-1; floor >= 0; floor--) {
+        printf("  %d   |  %d  |    %d    |     %d     \n", 
+               floor,
+               queue.cab_orders[floor] ? 1 : 0, 
+               queue.hall_up_orders[floor] ? 1 : 0, 
+               queue.hall_down_orders[floor] ? 1 : 0);
+    }
+    printf("-------------------------------\n\n");
 }

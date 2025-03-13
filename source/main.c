@@ -15,14 +15,13 @@
 int main() {
 
     uint32_t loop_rate_ms = 10;
-    //con_load("source/elevator.con", con_val("loop_rate_ms", &loop_rate_ms, "%d"));
+    con_load("source/elevator.con", con_val("loop_rate_ms", &loop_rate_ms, "%d"));
     
     printf("elevator.con loaded\n\n");
     printf("Loop rate: %d ms\n", loop_rate_ms);
-
     printf("=== Elevator starting..... ===\n");
-    printf("Press the stop button on the elevator panel to exit\n");
 
+    elevio_init();
     elevator_init();
 
     while(1) {
@@ -36,8 +35,6 @@ int main() {
 
 
         usleep(loop_rate_ms * 1000); // Microseconds to milliseconds
-
-
     }
 
     printf("=== Elevator shutting down ===\n");

@@ -9,9 +9,7 @@ typedef MotorDirection Direction;
 typedef enum {
     STANDBY,
     MOVING,
-    MOVING_ON_FLOOR,
     DOOR_OPEN,
-    OBSTRUCTED,
     STOPPED,
 } ElevatorState;
 
