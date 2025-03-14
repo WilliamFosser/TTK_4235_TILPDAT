@@ -1,0 +1,83 @@
+\doxysection{source/timer.c File Reference}
+\hypertarget{timer_8c}{}\label{timer_8c}\index{source/timer.c@{source/timer.c}}
+
+
+Starts a timer with a given duration.  
+
+
+{\ttfamily \#include "{}timer.\+h"{}}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+Include dependency graph for timer.\+c\+:
+% FIG 0
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{timer_8c_a1f4cfd048aaa887a58e737ffc89662c0}{start\+\_\+timer}} (\mbox{\hyperlink{structTimer}{Timer}} \texorpdfstring{$\ast$}{*}timer, time\+\_\+t duration)
+\begin{DoxyCompactList}\small\item\em Starts a timer with a given duration in seconds. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{timer_8c_a3c1bdb91f333ffee98b637cfe8764f38}{timer\+\_\+expired}} (\mbox{\hyperlink{structTimer}{Timer}} \texorpdfstring{$\ast$}{*}timer)
+\begin{DoxyCompactList}\small\item\em Checks if the timer has expired. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Starts a timer with a given duration. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timer} & Pointer to the \doxylink{structTimer}{Timer} structure. \\
+\hline
+{\em duration} & Duration of the timer in seconds. \\
+\hline
+\end{DoxyParams}
+
+
+Definition in file \mbox{\hyperlink{timer_8c_source}{timer.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{timer_8c_a1f4cfd048aaa887a58e737ffc89662c0}\label{timer_8c_a1f4cfd048aaa887a58e737ffc89662c0} 
+\index{timer.c@{timer.c}!start\_timer@{start\_timer}}
+\index{start\_timer@{start\_timer}!timer.c@{timer.c}}
+\doxysubsubsection{\texorpdfstring{start\_timer()}{start\_timer()}}
+{\footnotesize\ttfamily void start\+\_\+timer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structTimer}{Timer}} \texorpdfstring{$\ast$}{*}}]{timer,  }\item[{time\+\_\+t}]{duration }\end{DoxyParamCaption})}
+
+
+
+Starts a timer with a given duration in seconds. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timer} & Pointer to the \doxylink{structTimer}{Timer} structure. \\
+\hline
+{\em duration} & Duration of the timer in seconds. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{timer_8c_source_l00012}{12}} of file \mbox{\hyperlink{timer_8c_source}{timer.\+c}}.
+
+\Hypertarget{timer_8c_a3c1bdb91f333ffee98b637cfe8764f38}\label{timer_8c_a3c1bdb91f333ffee98b637cfe8764f38} 
+\index{timer.c@{timer.c}!timer\_expired@{timer\_expired}}
+\index{timer\_expired@{timer\_expired}!timer.c@{timer.c}}
+\doxysubsubsection{\texorpdfstring{timer\_expired()}{timer\_expired()}}
+{\footnotesize\ttfamily bool timer\+\_\+expired (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structTimer}{Timer}} \texorpdfstring{$\ast$}{*}}]{timer }\end{DoxyParamCaption})}
+
+
+
+Checks if the timer has expired. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timer} & Pointer to the \doxylink{structTimer}{Timer} structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true If the timer has expired. 
+
+false If the timer has not expired. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{timer_8c_source_l00026}{26}} of file \mbox{\hyperlink{timer_8c_source}{timer.\+c}}.
+

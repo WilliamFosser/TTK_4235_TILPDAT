@@ -1,0 +1,209 @@
+\doxysection{Elevator Struct Reference}
+\hypertarget{structElevator}{}\label{structElevator}\index{Elevator@{Elevator}}
+
+
+Structure representing the elevator.  
+
+
+
+
+{\ttfamily \#include $<$elevator.\+h$>$}
+
+
+
+Collaboration diagram for Elevator\+:
+% FIG 0
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+int8\+\_\+t \mbox{\hyperlink{structElevator_a880a6e5423a807ae16f2caca6c1dab5f}{floor}}
+\begin{DoxyCompactList}\small\item\em Current floor of the elevator, -\/1 for undefined. \end{DoxyCompactList}\item 
+Direction \mbox{\hyperlink{structElevator_a10d909491f102b2ef3c14c09d8df0626}{direction}}
+\begin{DoxyCompactList}\small\item\em Current direction of the elevator. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{structElevator_adba7906ad4ed33afa8dcdcadf639605a}{last\+\_\+floor}}
+\begin{DoxyCompactList}\small\item\em Last known floor of the elevator. \end{DoxyCompactList}\item 
+Direction \mbox{\hyperlink{structElevator_a09fd22018a5720abee57777242788d6f}{last\+\_\+direction}}
+\begin{DoxyCompactList}\small\item\em Last direction of the elevator. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structElevator_a72a00845aac71983445de9911e12ffdc}{stop\+\_\+button}}
+\begin{DoxyCompactList}\small\item\em State of the stop button. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structElevator_a740568ae30d79d246a499a7041fd4a59}{door\+\_\+open}}
+\begin{DoxyCompactList}\small\item\em State of the door. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structElevator_ab3ced0500a4a9d06c752665b15e1dc10}{obstructed}}
+\begin{DoxyCompactList}\small\item\em State of the obstruction sensor. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structElevator_a936ecaf3b9147acb3a5da8ac4e8ab6dc}{is\+Idle}}
+\begin{DoxyCompactList}\small\item\em State indicating if the elevator is idle. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{structElevator_ad5567605f79559883c5a2fdc33051ecd}{next\+Floor}}
+\begin{DoxyCompactList}\small\item\em Next floor the elevator will move to. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structElevator_ae1e20bd399ec9d5fc9894ff7b1eaf762}{stop\+Flag}}
+\begin{DoxyCompactList}\small\item\em Flag indicating if the stop button was pressed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structQueue}{Queue}} \mbox{\hyperlink{structElevator_af5239ff4e1b725701da4934f8c9443b2}{queue}}
+\begin{DoxyCompactList}\small\item\em \doxylink{structQueue}{Queue} of orders for the elevator. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Structure representing the elevator. 
+
+Definition at line \mbox{\hyperlink{elevator_8h_source_l00012}{12}} of file \mbox{\hyperlink{elevator_8h_source}{elevator.\+h}}.
+
+
+
+\doxysubsection{Field Documentation}
+\Hypertarget{structElevator_a10d909491f102b2ef3c14c09d8df0626}\label{structElevator_a10d909491f102b2ef3c14c09d8df0626} 
+\index{Elevator@{Elevator}!direction@{direction}}
+\index{direction@{direction}!Elevator@{Elevator}}
+\doxysubsubsection{\texorpdfstring{direction}{direction}}
+{\footnotesize\ttfamily Direction Elevator\+::direction}
+
+
+
+Current direction of the elevator. 
+
+
+
+Definition at line \mbox{\hyperlink{elevator_8h_source_l00015}{15}} of file \mbox{\hyperlink{elevator_8h_source}{elevator.\+h}}.
+
+\Hypertarget{structElevator_a740568ae30d79d246a499a7041fd4a59}\label{structElevator_a740568ae30d79d246a499a7041fd4a59} 
+\index{Elevator@{Elevator}!door\_open@{door\_open}}
+\index{door\_open@{door\_open}!Elevator@{Elevator}}
+\doxysubsubsection{\texorpdfstring{door\_open}{door\_open}}
+{\footnotesize\ttfamily bool Elevator\+::door\+\_\+open}
+
+
+
+State of the door. 
+
+
+
+Definition at line \mbox{\hyperlink{elevator_8h_source_l00019}{19}} of file \mbox{\hyperlink{elevator_8h_source}{elevator.\+h}}.
+
+\Hypertarget{structElevator_a880a6e5423a807ae16f2caca6c1dab5f}\label{structElevator_a880a6e5423a807ae16f2caca6c1dab5f} 
+\index{Elevator@{Elevator}!floor@{floor}}
+\index{floor@{floor}!Elevator@{Elevator}}
+\doxysubsubsection{\texorpdfstring{floor}{floor}}
+{\footnotesize\ttfamily int8\+\_\+t Elevator\+::floor}
+
+
+
+Current floor of the elevator, -\/1 for undefined. 
+
+
+
+Definition at line \mbox{\hyperlink{elevator_8h_source_l00014}{14}} of file \mbox{\hyperlink{elevator_8h_source}{elevator.\+h}}.
+
+\Hypertarget{structElevator_a936ecaf3b9147acb3a5da8ac4e8ab6dc}\label{structElevator_a936ecaf3b9147acb3a5da8ac4e8ab6dc} 
+\index{Elevator@{Elevator}!isIdle@{isIdle}}
+\index{isIdle@{isIdle}!Elevator@{Elevator}}
+\doxysubsubsection{\texorpdfstring{isIdle}{isIdle}}
+{\footnotesize\ttfamily bool Elevator\+::is\+Idle}
+
+
+
+State indicating if the elevator is idle. 
+
+
+
+Definition at line \mbox{\hyperlink{elevator_8h_source_l00021}{21}} of file \mbox{\hyperlink{elevator_8h_source}{elevator.\+h}}.
+
+\Hypertarget{structElevator_a09fd22018a5720abee57777242788d6f}\label{structElevator_a09fd22018a5720abee57777242788d6f} 
+\index{Elevator@{Elevator}!last\_direction@{last\_direction}}
+\index{last\_direction@{last\_direction}!Elevator@{Elevator}}
+\doxysubsubsection{\texorpdfstring{last\_direction}{last\_direction}}
+{\footnotesize\ttfamily Direction Elevator\+::last\+\_\+direction}
+
+
+
+Last direction of the elevator. 
+
+
+
+Definition at line \mbox{\hyperlink{elevator_8h_source_l00017}{17}} of file \mbox{\hyperlink{elevator_8h_source}{elevator.\+h}}.
+
+\Hypertarget{structElevator_adba7906ad4ed33afa8dcdcadf639605a}\label{structElevator_adba7906ad4ed33afa8dcdcadf639605a} 
+\index{Elevator@{Elevator}!last\_floor@{last\_floor}}
+\index{last\_floor@{last\_floor}!Elevator@{Elevator}}
+\doxysubsubsection{\texorpdfstring{last\_floor}{last\_floor}}
+{\footnotesize\ttfamily uint8\+\_\+t Elevator\+::last\+\_\+floor}
+
+
+
+Last known floor of the elevator. 
+
+
+
+Definition at line \mbox{\hyperlink{elevator_8h_source_l00016}{16}} of file \mbox{\hyperlink{elevator_8h_source}{elevator.\+h}}.
+
+\Hypertarget{structElevator_ad5567605f79559883c5a2fdc33051ecd}\label{structElevator_ad5567605f79559883c5a2fdc33051ecd} 
+\index{Elevator@{Elevator}!nextFloor@{nextFloor}}
+\index{nextFloor@{nextFloor}!Elevator@{Elevator}}
+\doxysubsubsection{\texorpdfstring{nextFloor}{nextFloor}}
+{\footnotesize\ttfamily int Elevator\+::next\+Floor}
+
+
+
+Next floor the elevator will move to. 
+
+
+
+Definition at line \mbox{\hyperlink{elevator_8h_source_l00022}{22}} of file \mbox{\hyperlink{elevator_8h_source}{elevator.\+h}}.
+
+\Hypertarget{structElevator_ab3ced0500a4a9d06c752665b15e1dc10}\label{structElevator_ab3ced0500a4a9d06c752665b15e1dc10} 
+\index{Elevator@{Elevator}!obstructed@{obstructed}}
+\index{obstructed@{obstructed}!Elevator@{Elevator}}
+\doxysubsubsection{\texorpdfstring{obstructed}{obstructed}}
+{\footnotesize\ttfamily bool Elevator\+::obstructed}
+
+
+
+State of the obstruction sensor. 
+
+
+
+Definition at line \mbox{\hyperlink{elevator_8h_source_l00020}{20}} of file \mbox{\hyperlink{elevator_8h_source}{elevator.\+h}}.
+
+\Hypertarget{structElevator_af5239ff4e1b725701da4934f8c9443b2}\label{structElevator_af5239ff4e1b725701da4934f8c9443b2} 
+\index{Elevator@{Elevator}!queue@{queue}}
+\index{queue@{queue}!Elevator@{Elevator}}
+\doxysubsubsection{\texorpdfstring{queue}{queue}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structQueue}{Queue}} Elevator\+::queue}
+
+
+
+\doxylink{structQueue}{Queue} of orders for the elevator. 
+
+
+
+Definition at line \mbox{\hyperlink{elevator_8h_source_l00024}{24}} of file \mbox{\hyperlink{elevator_8h_source}{elevator.\+h}}.
+
+\Hypertarget{structElevator_a72a00845aac71983445de9911e12ffdc}\label{structElevator_a72a00845aac71983445de9911e12ffdc} 
+\index{Elevator@{Elevator}!stop\_button@{stop\_button}}
+\index{stop\_button@{stop\_button}!Elevator@{Elevator}}
+\doxysubsubsection{\texorpdfstring{stop\_button}{stop\_button}}
+{\footnotesize\ttfamily bool Elevator\+::stop\+\_\+button}
+
+
+
+State of the stop button. 
+
+
+
+Definition at line \mbox{\hyperlink{elevator_8h_source_l00018}{18}} of file \mbox{\hyperlink{elevator_8h_source}{elevator.\+h}}.
+
+\Hypertarget{structElevator_ae1e20bd399ec9d5fc9894ff7b1eaf762}\label{structElevator_ae1e20bd399ec9d5fc9894ff7b1eaf762} 
+\index{Elevator@{Elevator}!stopFlag@{stopFlag}}
+\index{stopFlag@{stopFlag}!Elevator@{Elevator}}
+\doxysubsubsection{\texorpdfstring{stopFlag}{stopFlag}}
+{\footnotesize\ttfamily bool Elevator\+::stop\+Flag}
+
+
+
+Flag indicating if the stop button was pressed. 
+
+
+
+Definition at line \mbox{\hyperlink{elevator_8h_source_l00023}{23}} of file \mbox{\hyperlink{elevator_8h_source}{elevator.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+source/elevator.\+h\end{DoxyCompactItemize}

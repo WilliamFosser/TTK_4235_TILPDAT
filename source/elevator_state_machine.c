@@ -5,6 +5,12 @@
 #include <time.h>
 #include "timer.h"
 
+/**
+ * @file
+ * @brief Elevator state machine that controls the elevator's behavior.
+ * 
+ * @param elevator Pointer to the Elevator structure.
+ */
 void elevator_state_machine(Elevator *elevator) {
     while(1) {
         if (elevator->door_open) {

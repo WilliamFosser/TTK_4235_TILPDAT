@@ -1,0 +1,33 @@
+\doxysection{queue.\+c}
+\hypertarget{queue_8c_source}{}\label{queue_8c_source}\index{source/queue.c@{source/queue.c}}
+\mbox{\hyperlink{queue_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{queue_8h}{queue.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00003}00003\ \textcolor{preprocessor}{\#include\ "{}driver/elevio.h"{}}}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00012}00012\ \textcolor{keywordtype}{void}\ pop\_all\_orders(\mbox{\hyperlink{structQueue}{Queue}}\ *queue)\ \{}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00013}00013\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ 4;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00014}00014\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ j\ =\ 0;\ j\ <\ 3;\ j++)\ \{}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00015}00015\ \ \ \ \ \ \ \ \ \ \ \ \ elevio\_buttonLamp(i,\ j,\ 0);}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00016}00016\ \ \ \ \ \ \ \ \ \ \ \ \ queue-\/>orders[i][j]\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00017}00017\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00018}00018\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00019}00019\ \};}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00028}\mbox{\hyperlink{queue_8c_ac740686513aa90020d2209eedd2f28e0}{00028}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{queue_8c_ac740686513aa90020d2209eedd2f28e0}{add\_order}}(\mbox{\hyperlink{structQueue}{Queue}}\ *queue,\ uint8\_t\ floor,\ ButtonType\ button\_type)\ \{}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00029}00029\ \ \ \ \ queue-\/>orders[floor][button\_type]\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00030}00030\ \};}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00038}\mbox{\hyperlink{queue_8c_a162ef3b882cb2005f019226adc724b15}{00038}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{queue_8c_a162ef3b882cb2005f019226adc724b15}{pop\_order}}(\mbox{\hyperlink{structQueue}{Queue}}\ *queue,\ uint8\_t\ floor)\ \{}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00039}00039\ \ \ \ \ \textcolor{keywordflow}{for}\ (uint8\_t\ i\ =\ 0;\ i\ <\ 3;\ i++)\ \{\ \textcolor{comment}{//turn\ off\ lights\ for\ all\ buttons\ at\ floor}}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00040}00040\ \ \ \ \ \ \ \ \ queue-\/>orders[floor][i]\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00041}00041\ \ \ \ \ \ \ \ \ elevio\_buttonLamp(floor,\ i,\ 0);}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00042}00042\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00043}00043\ \};}
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{queue_8c_source_l00046}00046\ }
+
+\end{DoxyCode}

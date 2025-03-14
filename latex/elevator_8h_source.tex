@@ -1,0 +1,50 @@
+\doxysection{elevator.\+h}
+\hypertarget{elevator_8h_source}{}\label{elevator_8h_source}\index{source/elevator.h@{source/elevator.h}}
+\mbox{\hyperlink{elevator_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00001}00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ "{}driver/elevio.h"{}}}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00005}00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{queue_8h}{queue.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00007}00007\ \textcolor{keyword}{typedef}\ MotorDirection\ Direction;\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00013}\mbox{\hyperlink{structElevator}{00013}}\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00014}00014\ \{}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00015}\mbox{\hyperlink{structElevator_a880a6e5423a807ae16f2caca6c1dab5f}{00015}}\ \ \ \ \ int8\_t\ \mbox{\hyperlink{structElevator_a880a6e5423a807ae16f2caca6c1dab5f}{floor}};\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00016}\mbox{\hyperlink{structElevator_a10d909491f102b2ef3c14c09d8df0626}{00016}}\ \ \ \ \ Direction\ \mbox{\hyperlink{structElevator_a10d909491f102b2ef3c14c09d8df0626}{direction}};\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00017}\mbox{\hyperlink{structElevator_adba7906ad4ed33afa8dcdcadf639605a}{00017}}\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{structElevator_adba7906ad4ed33afa8dcdcadf639605a}{last\_floor}};\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00018}\mbox{\hyperlink{structElevator_a09fd22018a5720abee57777242788d6f}{00018}}\ \ \ \ \ Direction\ \mbox{\hyperlink{structElevator_a09fd22018a5720abee57777242788d6f}{last\_direction}};\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00019}\mbox{\hyperlink{structElevator_a72a00845aac71983445de9911e12ffdc}{00019}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structElevator_a72a00845aac71983445de9911e12ffdc}{stop\_button}};\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00020}\mbox{\hyperlink{structElevator_a740568ae30d79d246a499a7041fd4a59}{00020}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structElevator_a740568ae30d79d246a499a7041fd4a59}{door\_open}};\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00021}\mbox{\hyperlink{structElevator_ab3ced0500a4a9d06c752665b15e1dc10}{00021}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structElevator_ab3ced0500a4a9d06c752665b15e1dc10}{obstructed}};\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00022}\mbox{\hyperlink{structElevator_a936ecaf3b9147acb3a5da8ac4e8ab6dc}{00022}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structElevator_a936ecaf3b9147acb3a5da8ac4e8ab6dc}{isIdle}};\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00023}\mbox{\hyperlink{structElevator_ad5567605f79559883c5a2fdc33051ecd}{00023}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structElevator_ad5567605f79559883c5a2fdc33051ecd}{nextFloor}};\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00024}\mbox{\hyperlink{structElevator_ae1e20bd399ec9d5fc9894ff7b1eaf762}{00024}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structElevator_ae1e20bd399ec9d5fc9894ff7b1eaf762}{stopFlag}};\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00025}\mbox{\hyperlink{structElevator_af5239ff4e1b725701da4934f8c9443b2}{00025}}\ \ \ \ \ \mbox{\hyperlink{structQueue}{Queue}}\ \mbox{\hyperlink{structElevator_af5239ff4e1b725701da4934f8c9443b2}{queue}};\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00026}00026\ \}\ \mbox{\hyperlink{structElevator}{Elevator}};}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00033}00033\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{elevator_8h_acfbd7bc49b8a23158daac04bdf3bd250}{elevator\_init}}(\mbox{\hyperlink{structElevator}{Elevator}}\ *elevator);}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00040}00040\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{elevator_8h_ab76a6a695fc9bf83205380d43cd512f6}{elevator\_state\_machine}}(\mbox{\hyperlink{structElevator}{Elevator}}\ *elevator);}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00049}00049\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{elevator_8h_a5f3a3c7699c77a30107684a40b608022}{check\_if\_stop}}(\mbox{\hyperlink{structElevator}{Elevator}}\ *elevator);}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00056}00056\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{elevator_8h_a07fd9f42f5f6c2d6196455584a47cba6}{stop\_elevator}}(\mbox{\hyperlink{structElevator}{Elevator}}\ *elevator);}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00063}00063\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{elevator_8h_a703eb30a0f881167ea718d3ada9e8e18}{update\_floor}}(\mbox{\hyperlink{structElevator}{Elevator}}\ *elevator);}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00070}00070\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{elevator_8h_a3579107a2b4f7c1cfbb0048933cde214}{open\_door}}(\mbox{\hyperlink{structElevator}{Elevator}}\ *elevator);}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00071}00071\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00077}00077\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{elevator_8h_a9a6173a9fb79a1addcf71e3e6b7cffb4}{close\_door}}(\mbox{\hyperlink{structElevator}{Elevator}}\ *elevator);\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00078}00078\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00085}00085\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{elevator_8h_a3e6da9898207cb483f3f9730af304520}{set\_direction}}(\mbox{\hyperlink{structElevator}{Elevator}}\ *elevator,\ Direction\ direction);}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00086}00086\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00092}00092\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{elevator_8h_af164914842de0e50c0e12a4e6467a9c4}{check\_buttons}}(\mbox{\hyperlink{structElevator}{Elevator}}\ *elevator);}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00100}00100\ Direction\ \mbox{\hyperlink{elevator_8h_a1bc3c4da063ebec4480092be0a6e70a6}{move\_elevator}}(\mbox{\hyperlink{structElevator}{Elevator}}\ *elevator);}
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{elevator_8h_source_l00109}00109\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{elevator_8h_a379a8c6b74fd48b09b553fbf53984240}{handle\_stop\_butn}}(\mbox{\hyperlink{structElevator}{Elevator}}\ *elevator);}
+
+\end{DoxyCode}
