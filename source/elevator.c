@@ -130,7 +130,6 @@ void elevator_state_machine() {
     //printf("Current floor: %d\n", elevator.floor);
     //printf("Current direction: %d\n", elevator.direction);
 
-
     if (elevio_stopButton()) {
         elevator.state = STOPPED;
     }
@@ -167,7 +166,7 @@ void elevator_state_machine() {
                     }
                 }
             }
-            else { // Heisen har nådd en ende
+            else { // Have reached end
                 if (order_at_floor(elevator.floor)) {
                     pop_order(elevator.floor);
                     open_door();
@@ -187,21 +186,17 @@ void elevator_state_machine() {
             if (!elevator.door_open) {
                 open_door();
             }
-            // Dersom det er hindring (f.eks. en person i døråpningen), nullstill timeren
             if (elevio_obstruction()) {
                 timer_active = false;
                 break;
             }
-            // Sørg for at dørlampen er på dersom etasjen er definert
             if (elevator.floor != -1) {
                 elevio_doorOpenLamp(1);
             }
-            // Start timeren dersom den ikke allerede er aktiv
             if (!timer_active) {
                 start_timer(3);
                 timer_active = true;
             }
-            // Når timeren utløper, lukk døren og fortsett bevegelse
             if (timer_expired()) {
                 close_door();
                 elevator.state = MOVING;
@@ -212,17 +207,17 @@ void elevator_state_machine() {
 
         case STOPPED:
             set_direction(DIRN_STOP);
-            // Ved stopp skal døren åpnes dersom heisen er i en etasje (D3, S7)
+           
             if (elevator.floor != -1) {
                 elevio_doorOpenLamp(1);
                 open_door();
             }
-            // Vent til stoppknappen slippes, og sørg for at stopplyset er tent mens knappen trykkes (S6)
+            
             elevio_stopLamp(1);
             while (elevio_stopButton()) {
                 usleep(10000);
             }
-            // Slett alle ubetjente bestillinger (S5)
+            
             pop_all_orders();
             elevio_stopLamp(0);
             if (elevator.floor != -1) {
