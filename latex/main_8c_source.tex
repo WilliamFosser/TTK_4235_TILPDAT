@@ -1,0 +1,32 @@
+\doxysection{main.\+c}
+\hypertarget{main_8c_source}{}\label{main_8c_source}\index{source/main.c@{source/main.c}}
+\mbox{\hyperlink{main_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <signal.h>}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <time.h>}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00006}00006\ \textcolor{preprocessor}{\#include\ "{}driver/elevio.h"{}}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00007}00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{timer_8h}{timer.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00008}00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{elevator_8h}{elevator.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00017}00017\ \textcolor{keywordtype}{int}\ main()\ \{}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00020}00020\ \ \ \ \ printf(\textcolor{stringliteral}{"{}===\ Elevator\ starting.....\ ===\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00021}00021\ \ \ \ \ printf(\textcolor{stringliteral}{"{}Press\ the\ stop\ button\ on\ the\ elevator\ panel\ to\ exit\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00023}00023\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00024}00024\ \ \ \ \ elevio\_init();}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00025}00025\ \ \ \ \ \mbox{\hyperlink{structElevator}{Elevator}}\ elevator;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00026}00026\ \ \ \ \ \mbox{\hyperlink{elevator_8c_acfbd7bc49b8a23158daac04bdf3bd250}{elevator\_init}}(\&elevator);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00027}00027\ \ \ \ \ \mbox{\hyperlink{elevator_8h_ab76a6a695fc9bf83205380d43cd512f6}{elevator\_state\_machine}}(\&elevator);}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00029}00029\ \ \ \ \ printf(\textcolor{stringliteral}{"{}===\ Elevator\ shutting\ down\ ===\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00031}00031\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{main_8c_source_l00032}00032\ \}}
+
+\end{DoxyCode}

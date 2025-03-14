@@ -1,0 +1,27 @@
+\doxysection{timer.\+c}
+\hypertarget{timer_8c_source}{}\label{timer_8c_source}\index{source/timer.c@{source/timer.c}}
+\mbox{\hyperlink{timer_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{timer_8h}{timer.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00012}\mbox{\hyperlink{timer_8c_a1f4cfd048aaa887a58e737ffc89662c0}{00012}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{timer_8c_a1f4cfd048aaa887a58e737ffc89662c0}{start\_timer}}(\mbox{\hyperlink{structTimer}{Timer}}\ *timer,\ time\_t\ duration)\ \{}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00013}00013\ \ \ \ \ timer-\/>\mbox{\hyperlink{structTimer_a37cfc8128df2933479cd3469d91ba387}{duration}}\ =\ duration;}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00014}00014\ \ \ \ \ time(\&timer-\/>\mbox{\hyperlink{structTimer_a604dea31f102c09abbb0b2aa0501878a}{start\_time}});}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00016}00016\ \ \ \ \ printf(\textcolor{stringliteral}{"{}Timer\ started\ \(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00017}00017\ \}}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00026}\mbox{\hyperlink{timer_8c_a3c1bdb91f333ffee98b637cfe8764f38}{00026}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{timer_8c_a3c1bdb91f333ffee98b637cfe8764f38}{timer\_expired}}(\mbox{\hyperlink{structTimer}{Timer}}\ *timer)\ \{}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00027}00027\ \ \ \ \ time(\&timer-\/>\mbox{\hyperlink{structTimer_a17aecd77009d6c07ac04d6c69acb9d28}{current\_time}});}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00028}00028\ \ \ \ \ time\_t\ time\_diff\ =\ timer-\/>\mbox{\hyperlink{structTimer_a17aecd77009d6c07ac04d6c69acb9d28}{current\_time}}\ -\/\ timer-\/>\mbox{\hyperlink{structTimer_a604dea31f102c09abbb0b2aa0501878a}{start\_time}};}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00029}00029\ \ \ \ \ \textcolor{keywordflow}{if}\ (time\_diff\ >=\ timer-\/>\mbox{\hyperlink{structTimer_a37cfc8128df2933479cd3469d91ba387}{duration}})\ \{}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00030}00030\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Timer\ expired\ after\ \%ld\ seconds\ \(\backslash\)n"{}},\ time\_diff);}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00031}00031\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00032}00032\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00033}00033\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00034}00034\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{timer_8c_source_l00035}00035\ \}}
+
+\end{DoxyCode}

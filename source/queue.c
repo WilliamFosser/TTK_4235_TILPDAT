@@ -3,44 +3,44 @@
 #include "driver/elevio.h"
 #include <stdio.h>
 
-
-void new_queue(Queue *queue) {
-    for (uint8_t i = 0; i < N_FLOORS; i++) {
-        queue->prioritized_orders[i] = false;
-        queue->unprioritized_orders[i] = false;
-    }
-};
-
-void add_order(Queue *queue, uint8_t floor, bool is_cab_order) {
-    if (is_cab_order) {
-        queue->prioritized_orders[floor] = true;
-        printf("Added prioritized order \n");
-    } else {
-        queue->unprioritized_orders[floor] = true;
-        printf("Added unprioritized order \n");
-    }
-};
-
-
-void pop_order(Queue *queue, uint8_t floor) {
-    queue->prioritized_orders[floor] = false;
-    queue->unprioritized_orders[floor] = false;
-
-    elevio_buttonLamp(floor, BUTTON_HALL_DOWN, 0);
-    elevio_buttonLamp(floor, BUTTON_HALL_UP, 0);
-    elevio_buttonLamp(floor, BUTTON_CAB, 0);
-}; 
-
-
+/**
+ * @file
+ * @brief Clears all orders from the queue.
+ * 
+ * @param queue Pointer to the Queue structure.
+ */
 void pop_all_orders(Queue *queue) {
-    for (uint8_t floor = 0; floor < N_FLOORS; floor++) {
-        queue->prioritized_orders[floor] = false;
-        queue->unprioritized_orders[floor] = false;
-
-        elevio_buttonLamp(floor, BUTTON_HALL_DOWN, 0);
-        elevio_buttonLamp(floor, BUTTON_HALL_UP, 0);
-        elevio_buttonLamp(floor, BUTTON_CAB, 0);
+    for (uint8_t i = 0; i < 4; i++) {
+        for (uint8_t j = 0; j < 3; j++) {
+            elevio_buttonLamp(i, j, 0);
+            queue->orders[i][j] = false;
+        }
     }
 };
-    
-    
+
+/**
+ * @brief Adds an order to the queue.
+ * 
+ * @param queue Pointer to the Queue structure.
+ * @param floor The floor for the order.
+ * @param button_type The type of button pressed.
+ */
+void add_order(Queue *queue, uint8_t floor, ButtonType button_type) {
+    queue->orders[floor][button_type] = true;
+};
+
+/**
+ * @brief Removes an order from the queue.
+ * 
+ * @param queue Pointer to the Queue structure.
+ * @param floor The floor for the order.
+ */
+void pop_order(Queue *queue, uint8_t floor) {
+    for (uint8_t i = 0; i < 3; i++) { //turn off lights for all buttons at floor
+        queue->orders[floor][i] = false;
+        elevio_buttonLamp(floor, i, 0);
+    }
+};
+
+
+

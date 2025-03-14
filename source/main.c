@@ -1,21 +1,20 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <time.h>
 #include <stdbool.h>
 #include "driver/elevio.h"
-
 #include "timer.h"
 #include "elevator.h"
 
 
-
-
-
-
-
-int main(){
+/**
+ * @file 
+ * @brief Main function to initialize and start the elevator.
+ * 
+ * @return int Exit status.
+ */
+int main() {
 
 
     printf("=== Elevator starting..... ===\n");

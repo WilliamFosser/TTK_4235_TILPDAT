@@ -3,16 +3,32 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-
+/**
+ * @file
+ * @brief Structure representing a timer.
+ */
 typedef struct
 {
-    time_t duration;
-    time_t start_time; 
-    time_t current_time;
+    time_t duration; ///< Duration of the timer in seconds.
+    time_t start_time; ///< Start time of the timer.
+    time_t current_time; ///< Current time.
 } Timer;
 
-// Starts a timer with a given duration in seconds
+/**
+ * @brief Starts a timer with a given duration in seconds.
+ * 
+ * @param timer Pointer to the Timer structure.
+ * @param duration Duration of the timer in seconds.
+ */
 void start_timer(Timer *timer, time_t duration);
+
+/**
+ * @brief Checks if the timer has expired.
+ * 
+ * @param timer Pointer to the Timer structure.
+ * @return true If the timer has expired.
+ * @return false If the timer has not expired.
+ */
 bool timer_expired(Timer *timer);
 
 

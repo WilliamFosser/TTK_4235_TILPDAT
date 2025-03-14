@@ -1,0 +1,93 @@
+\doxysection{source/queue.c File Reference}
+\hypertarget{queue_8c}{}\label{queue_8c}\index{source/queue.c@{source/queue.c}}
+
+
+Clears all orders from the queue.  
+
+
+{\ttfamily \#include "{}queue.\+h"{}}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include "{}driver/elevio.\+h"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+Include dependency graph for queue.\+c\+:
+% FIG 0
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{queue_8c_affde22357700fa33d7e93714fb64ca33}{pop\+\_\+all\+\_\+orders}} (\mbox{\hyperlink{structQueue}{Queue}} \texorpdfstring{$\ast$}{*}queue)
+\item 
+void \mbox{\hyperlink{queue_8c_ac740686513aa90020d2209eedd2f28e0}{add\+\_\+order}} (\mbox{\hyperlink{structQueue}{Queue}} \texorpdfstring{$\ast$}{*}queue, uint8\+\_\+t floor, Button\+Type button\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Adds an order to the queue. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{queue_8c_a162ef3b882cb2005f019226adc724b15}{pop\+\_\+order}} (\mbox{\hyperlink{structQueue}{Queue}} \texorpdfstring{$\ast$}{*}queue, uint8\+\_\+t floor)
+\begin{DoxyCompactList}\small\item\em Removes an order from the queue. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Clears all orders from the queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & Pointer to the \doxylink{structQueue}{Queue} structure. \\
+\hline
+\end{DoxyParams}
+
+
+Definition in file \mbox{\hyperlink{queue_8c_source}{queue.\+c}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{queue_8c_ac740686513aa90020d2209eedd2f28e0}\label{queue_8c_ac740686513aa90020d2209eedd2f28e0} 
+\index{queue.c@{queue.c}!add\_order@{add\_order}}
+\index{add\_order@{add\_order}!queue.c@{queue.c}}
+\doxysubsubsection{\texorpdfstring{add\_order()}{add\_order()}}
+{\footnotesize\ttfamily void add\+\_\+order (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structQueue}{Queue}} \texorpdfstring{$\ast$}{*}}]{queue,  }\item[{uint8\+\_\+t}]{floor,  }\item[{Button\+Type}]{button\+\_\+type }\end{DoxyParamCaption})}
+
+
+
+Adds an order to the queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & Pointer to the \doxylink{structQueue}{Queue} structure. \\
+\hline
+{\em floor} & The floor for the order. \\
+\hline
+{\em button\+\_\+type} & The type of button pressed. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{queue_8c_source_l00028}{28}} of file \mbox{\hyperlink{queue_8c_source}{queue.\+c}}.
+
+\Hypertarget{queue_8c_affde22357700fa33d7e93714fb64ca33}\label{queue_8c_affde22357700fa33d7e93714fb64ca33} 
+\index{queue.c@{queue.c}!pop\_all\_orders@{pop\_all\_orders}}
+\index{pop\_all\_orders@{pop\_all\_orders}!queue.c@{queue.c}}
+\doxysubsubsection{\texorpdfstring{pop\_all\_orders()}{pop\_all\_orders()}}
+{\footnotesize\ttfamily void pop\+\_\+all\+\_\+orders (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structQueue}{Queue}} \texorpdfstring{$\ast$}{*}}]{queue }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{queue_8c_source_l00012}{12}} of file \mbox{\hyperlink{queue_8c_source}{queue.\+c}}.
+
+\Hypertarget{queue_8c_a162ef3b882cb2005f019226adc724b15}\label{queue_8c_a162ef3b882cb2005f019226adc724b15} 
+\index{queue.c@{queue.c}!pop\_order@{pop\_order}}
+\index{pop\_order@{pop\_order}!queue.c@{queue.c}}
+\doxysubsubsection{\texorpdfstring{pop\_order()}{pop\_order()}}
+{\footnotesize\ttfamily void pop\+\_\+order (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structQueue}{Queue}} \texorpdfstring{$\ast$}{*}}]{queue,  }\item[{uint8\+\_\+t}]{floor }\end{DoxyParamCaption})}
+
+
+
+Removes an order from the queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & Pointer to the \doxylink{structQueue}{Queue} structure. \\
+\hline
+{\em floor} & The floor for the order. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{queue_8c_source_l00038}{38}} of file \mbox{\hyperlink{queue_8c_source}{queue.\+c}}.
+

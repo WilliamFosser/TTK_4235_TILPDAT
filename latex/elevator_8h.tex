@@ -1,0 +1,311 @@
+\doxysection{source/elevator.h File Reference}
+\hypertarget{elevator_8h}{}\label{elevator_8h}\index{source/elevator.h@{source/elevator.h}}
+
+
+Structure representing the elevator.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include "{}driver/elevio.\+h"{}}\newline
+{\ttfamily \#include "{}queue.\+h"{}}\newline
+Include dependency graph for elevator.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structElevator}{Elevator}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef Motor\+Direction \mbox{\hyperlink{elevator_8h_ae28c03cd935df1f915e9073fe57313ab}{Direction}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{elevator_8h_acfbd7bc49b8a23158daac04bdf3bd250}{elevator\+\_\+init}} (\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}elevator)
+\begin{DoxyCompactList}\small\item\em Initializes the elevator. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{elevator_8h_ab76a6a695fc9bf83205380d43cd512f6}{elevator\+\_\+state\+\_\+machine}} (\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}elevator)
+\begin{DoxyCompactList}\small\item\em \doxylink{structElevator}{Elevator} state machine. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{elevator_8h_a5f3a3c7699c77a30107684a40b608022}{check\+\_\+if\+\_\+stop}} (\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}elevator)
+\begin{DoxyCompactList}\small\item\em Checks i@filef the elevator should stop at the current floor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{elevator_8h_a07fd9f42f5f6c2d6196455584a47cba6}{stop\+\_\+elevator}} (\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}elevator)
+\begin{DoxyCompactList}\small\item\em Stops the elevator and opens the door. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{elevator_8h_a703eb30a0f881167ea718d3ada9e8e18}{update\+\_\+floor}} (\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}elevator)
+\begin{DoxyCompactList}\small\item\em Updates the current floor of the elevator. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{elevator_8h_a3579107a2b4f7c1cfbb0048933cde214}{open\+\_\+door}} (\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}elevator)
+\begin{DoxyCompactList}\small\item\em Opens the elevator door. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{elevator_8h_a9a6173a9fb79a1addcf71e3e6b7cffb4}{close\+\_\+door}} (\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}elevator)
+\begin{DoxyCompactList}\small\item\em Closes the elevator door. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{elevator_8h_a3e6da9898207cb483f3f9730af304520}{set\+\_\+direction}} (\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}elevator, Direction direction)
+\begin{DoxyCompactList}\small\item\em Sets the direction of the elevator. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{elevator_8h_af164914842de0e50c0e12a4e6467a9c4}{check\+\_\+buttons}} (\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}elevator)
+\begin{DoxyCompactList}\small\item\em Checks the state of the buttons and updates the elevator queue. \end{DoxyCompactList}\item 
+Direction \mbox{\hyperlink{elevator_8h_a1bc3c4da063ebec4480092be0a6e70a6}{move\+\_\+elevator}} (\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}elevator)
+\begin{DoxyCompactList}\small\item\em Determines the direction the elevator should move. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{elevator_8h_a379a8c6b74fd48b09b553fbf53984240}{handle\+\_\+stop\+\_\+butn}} (\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}elevator)
+\begin{DoxyCompactList}\small\item\em Handles the stop button functionality. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Structure representing the elevator. 
+
+
+
+Definition in file \mbox{\hyperlink{elevator_8h_source}{elevator.\+h}}.
+
+
+
+\doxysubsection{Typedef Documentation}
+\Hypertarget{elevator_8h_ae28c03cd935df1f915e9073fe57313ab}\label{elevator_8h_ae28c03cd935df1f915e9073fe57313ab} 
+\index{elevator.h@{elevator.h}!Direction@{Direction}}
+\index{Direction@{Direction}!elevator.h@{elevator.h}}
+\doxysubsubsection{\texorpdfstring{Direction}{Direction}}
+{\footnotesize\ttfamily typedef Motor\+Direction Direction}
+
+
+
+Definition at line \mbox{\hyperlink{elevator_8h_source_l00007}{7}} of file \mbox{\hyperlink{elevator_8h_source}{elevator.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{elevator_8h_af164914842de0e50c0e12a4e6467a9c4}\label{elevator_8h_af164914842de0e50c0e12a4e6467a9c4} 
+\index{elevator.h@{elevator.h}!check\_buttons@{check\_buttons}}
+\index{check\_buttons@{check\_buttons}!elevator.h@{elevator.h}}
+\doxysubsubsection{\texorpdfstring{check\_buttons()}{check\_buttons()}}
+{\footnotesize\ttfamily void check\+\_\+buttons (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}}]{elevator }\end{DoxyParamCaption})}
+
+
+
+Checks the state of the buttons and updates the elevator queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elevator} & Pointer to the \doxylink{structElevator}{Elevator} structure. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{elevator_8c_source_l00105}{105}} of file \mbox{\hyperlink{elevator_8c_source}{elevator.\+c}}.
+
+\Hypertarget{elevator_8h_a5f3a3c7699c77a30107684a40b608022}\label{elevator_8h_a5f3a3c7699c77a30107684a40b608022} 
+\index{elevator.h@{elevator.h}!check\_if\_stop@{check\_if\_stop}}
+\index{check\_if\_stop@{check\_if\_stop}!elevator.h@{elevator.h}}
+\doxysubsubsection{\texorpdfstring{check\_if\_stop()}{check\_if\_stop()}}
+{\footnotesize\ttfamily bool check\+\_\+if\+\_\+stop (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}}]{elevator }\end{DoxyParamCaption})}
+
+
+
+Checks i@filef the elevator should stop at the current floor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elevator} & Pointer to the \doxylink{structElevator}{Elevator} structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true If the elevator should stop. 
+
+false If the elevator should not stop.
+\end{DoxyReturn}
+Checks i@filef the elevator should stop at the current floor.
+
+
+\begin{DoxyParams}{Parameters}
+{\em elevator} & Pointer to the \doxylink{structElevator}{Elevator} structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true If the elevator should stop. 
+
+false If the elevator should not stop. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{elevator_8c_source_l00209}{209}} of file \mbox{\hyperlink{elevator_8c_source}{elevator.\+c}}.
+
+\Hypertarget{elevator_8h_a9a6173a9fb79a1addcf71e3e6b7cffb4}\label{elevator_8h_a9a6173a9fb79a1addcf71e3e6b7cffb4} 
+\index{elevator.h@{elevator.h}!close\_door@{close\_door}}
+\index{close\_door@{close\_door}!elevator.h@{elevator.h}}
+\doxysubsubsection{\texorpdfstring{close\_door()}{close\_door()}}
+{\footnotesize\ttfamily void close\+\_\+door (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}}]{elevator }\end{DoxyParamCaption})}
+
+
+
+Closes the elevator door. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elevator} & Pointer to the \doxylink{structElevator}{Elevator} structure. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{elevator_8c_source_l00078}{78}} of file \mbox{\hyperlink{elevator_8c_source}{elevator.\+c}}.
+
+\Hypertarget{elevator_8h_acfbd7bc49b8a23158daac04bdf3bd250}\label{elevator_8h_acfbd7bc49b8a23158daac04bdf3bd250} 
+\index{elevator.h@{elevator.h}!elevator\_init@{elevator\_init}}
+\index{elevator\_init@{elevator\_init}!elevator.h@{elevator.h}}
+\doxysubsubsection{\texorpdfstring{elevator\_init()}{elevator\_init()}}
+{\footnotesize\ttfamily void elevator\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}}]{elevator }\end{DoxyParamCaption})}
+
+
+
+Initializes the elevator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elevator} & Pointer to the \doxylink{structElevator}{Elevator} structure. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{elevator_8c_source_l00016}{16}} of file \mbox{\hyperlink{elevator_8c_source}{elevator.\+c}}.
+
+\Hypertarget{elevator_8h_ab76a6a695fc9bf83205380d43cd512f6}\label{elevator_8h_ab76a6a695fc9bf83205380d43cd512f6} 
+\index{elevator.h@{elevator.h}!elevator\_state\_machine@{elevator\_state\_machine}}
+\index{elevator\_state\_machine@{elevator\_state\_machine}!elevator.h@{elevator.h}}
+\doxysubsubsection{\texorpdfstring{elevator\_state\_machine()}{elevator\_state\_machine()}}
+{\footnotesize\ttfamily void elevator\+\_\+state\+\_\+machine (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}}]{elevator }\end{DoxyParamCaption})}
+
+
+
+\doxylink{structElevator}{Elevator} state machine. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elevator} & Pointer to the \doxylink{structElevator}{Elevator} structure. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{elevator__state__machine_8c_source_l00014}{14}} of file \mbox{\hyperlink{elevator__state__machine_8c_source}{elevator\+\_\+state\+\_\+machine.\+c}}.
+
+\Hypertarget{elevator_8h_a379a8c6b74fd48b09b553fbf53984240}\label{elevator_8h_a379a8c6b74fd48b09b553fbf53984240} 
+\index{elevator.h@{elevator.h}!handle\_stop\_butn@{handle\_stop\_butn}}
+\index{handle\_stop\_butn@{handle\_stop\_butn}!elevator.h@{elevator.h}}
+\doxysubsubsection{\texorpdfstring{handle\_stop\_butn()}{handle\_stop\_butn()}}
+{\footnotesize\ttfamily bool handle\+\_\+stop\+\_\+butn (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}}]{elevator }\end{DoxyParamCaption})}
+
+
+
+Handles the stop button functionality. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elevator} & Pointer to the \doxylink{structElevator}{Elevator} structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true If the stop button was handled. 
+
+false If the stop button was not handled. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{elevator_8c_source_l00267}{267}} of file \mbox{\hyperlink{elevator_8c_source}{elevator.\+c}}.
+
+\Hypertarget{elevator_8h_a1bc3c4da063ebec4480092be0a6e70a6}\label{elevator_8h_a1bc3c4da063ebec4480092be0a6e70a6} 
+\index{elevator.h@{elevator.h}!move\_elevator@{move\_elevator}}
+\index{move\_elevator@{move\_elevator}!elevator.h@{elevator.h}}
+\doxysubsubsection{\texorpdfstring{move\_elevator()}{move\_elevator()}}
+{\footnotesize\ttfamily Direction move\+\_\+elevator (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}}]{elevator }\end{DoxyParamCaption})}
+
+
+
+Determines the direction the elevator should move. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elevator} & Pointer to the \doxylink{structElevator}{Elevator} structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Direction The direction the elevator should move. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{elevator_8c_source_l00147}{147}} of file \mbox{\hyperlink{elevator_8c_source}{elevator.\+c}}.
+
+\Hypertarget{elevator_8h_a3579107a2b4f7c1cfbb0048933cde214}\label{elevator_8h_a3579107a2b4f7c1cfbb0048933cde214} 
+\index{elevator.h@{elevator.h}!open\_door@{open\_door}}
+\index{open\_door@{open\_door}!elevator.h@{elevator.h}}
+\doxysubsubsection{\texorpdfstring{open\_door()}{open\_door()}}
+{\footnotesize\ttfamily void open\+\_\+door (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}}]{elevator }\end{DoxyParamCaption})}
+
+
+
+Opens the elevator door. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elevator} & Pointer to the \doxylink{structElevator}{Elevator} structure. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{elevator_8c_source_l00068}{68}} of file \mbox{\hyperlink{elevator_8c_source}{elevator.\+c}}.
+
+\Hypertarget{elevator_8h_a3e6da9898207cb483f3f9730af304520}\label{elevator_8h_a3e6da9898207cb483f3f9730af304520} 
+\index{elevator.h@{elevator.h}!set\_direction@{set\_direction}}
+\index{set\_direction@{set\_direction}!elevator.h@{elevator.h}}
+\doxysubsubsection{\texorpdfstring{set\_direction()}{set\_direction()}}
+{\footnotesize\ttfamily void set\+\_\+direction (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}}]{elevator,  }\item[{Direction}]{direction }\end{DoxyParamCaption})}
+
+
+
+Sets the direction of the elevator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elevator} & Pointer to the \doxylink{structElevator}{Elevator} structure. \\
+\hline
+{\em direction} & The direction to set. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{elevator_8c_source_l00123}{123}} of file \mbox{\hyperlink{elevator_8c_source}{elevator.\+c}}.
+
+\Hypertarget{elevator_8h_a07fd9f42f5f6c2d6196455584a47cba6}\label{elevator_8h_a07fd9f42f5f6c2d6196455584a47cba6} 
+\index{elevator.h@{elevator.h}!stop\_elevator@{stop\_elevator}}
+\index{stop\_elevator@{stop\_elevator}!elevator.h@{elevator.h}}
+\doxysubsubsection{\texorpdfstring{stop\_elevator()}{stop\_elevator()}}
+{\footnotesize\ttfamily void stop\+\_\+elevator (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}}]{elevator }\end{DoxyParamCaption})}
+
+
+
+Stops the elevator and opens the door. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elevator} & Pointer to the \doxylink{structElevator}{Elevator} structure. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{elevator_8c_source_l00253}{253}} of file \mbox{\hyperlink{elevator_8c_source}{elevator.\+c}}.
+
+\Hypertarget{elevator_8h_a703eb30a0f881167ea718d3ada9e8e18}\label{elevator_8h_a703eb30a0f881167ea718d3ada9e8e18} 
+\index{elevator.h@{elevator.h}!update\_floor@{update\_floor}}
+\index{update\_floor@{update\_floor}!elevator.h@{elevator.h}}
+\doxysubsubsection{\texorpdfstring{update\_floor()}{update\_floor()}}
+{\footnotesize\ttfamily void update\+\_\+floor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structElevator}{Elevator}} \texorpdfstring{$\ast$}{*}}]{elevator }\end{DoxyParamCaption})}
+
+
+
+Updates the current floor of the elevator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elevator} & Pointer to the \doxylink{structElevator}{Elevator} structure. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{elevator_8c_source_l00055}{55}} of file \mbox{\hyperlink{elevator_8c_source}{elevator.\+c}}.
+

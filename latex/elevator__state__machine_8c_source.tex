@@ -1,0 +1,35 @@
+\doxysection{elevator\+\_\+state\+\_\+machine.\+c}
+\hypertarget{elevator__state__machine_8c_source}{}\label{elevator__state__machine_8c_source}\index{source/elevator\_state\_machine.c@{source/elevator\_state\_machine.c}}
+\mbox{\hyperlink{elevator__state__machine_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{elevator_8h}{elevator.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00002}00002\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{queue_8h}{queue.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00003}00003\ \textcolor{preprocessor}{\#include\ "{}driver/elevio.h"{}}}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <time.h>}}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00006}00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{timer_8h}{timer.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00014}\mbox{\hyperlink{elevator_8h_ab76a6a695fc9bf83205380d43cd512f6}{00014}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{elevator__state__machine_8c_ab76a6a695fc9bf83205380d43cd512f6}{elevator\_state\_machine}}(\mbox{\hyperlink{structElevator}{Elevator}}\ *elevator)\ \{}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00015}00015\ \ \ \ \ \textcolor{keywordflow}{while}(1)\ \{}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00016}00016\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (elevator-\/>\mbox{\hyperlink{structElevator_a740568ae30d79d246a499a7041fd4a59}{door\_open}})\ \{}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00017}00017\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{elevator_8c_a9a6173a9fb79a1addcf71e3e6b7cffb4}{close\_door}}(elevator);}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00018}00018\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00020}00020\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{elevator_8c_a703eb30a0f881167ea718d3ada9e8e18}{update\_floor}}(elevator);\ \textcolor{comment}{//Updates\ floor\ when\ defined}}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00021}00021\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00022}00022\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{elevator_8c_a5f3a3c7699c77a30107684a40b608022}{check\_if\_stop}}(elevator))\{}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00023}00023\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{elevator_8c_a07fd9f42f5f6c2d6196455584a47cba6}{stop\_elevator}}(elevator);}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00024}00024\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00025}00025\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00026}00026\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{elevator_8c_a379a8c6b74fd48b09b553fbf53984240}{handle\_stop\_butn}}(elevator);}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00027}00027\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{elevator_8c_af164914842de0e50c0e12a4e6467a9c4}{check\_buttons}}(elevator);}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00028}00028\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{elevator_8c_a3e6da9898207cb483f3f9730af304520}{set\_direction}}(elevator,\ \mbox{\hyperlink{elevator_8c_a1bc3c4da063ebec4480092be0a6e70a6}{move\_elevator}}(elevator));}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00029}00029\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(elevio\_floorSensor()\ ==\ -\/1\ \&\&\ !elevator-\/>\mbox{\hyperlink{structElevator_ae1e20bd399ec9d5fc9894ff7b1eaf762}{stopFlag}}\ \&\&\ elevator-\/>\mbox{\hyperlink{structElevator_a10d909491f102b2ef3c14c09d8df0626}{direction}}\ ==\ DIRN\_STOP)\{\ \textcolor{comment}{//Makes\ sure\ elevator\ starts\ after\ stop\ button\ is\ released}}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00030}00030\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{elevator_8c_a3e6da9898207cb483f3f9730af304520}{set\_direction}}(elevator,\ DIRN\_DOWN);}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00031}00031\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00032}00032\ \ \ \ \ \ \ \ \ nanosleep(\&(\textcolor{keyword}{struct}\ timespec)\{0,\ 20*1000*1000\},\ NULL);}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00033}00033\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00034}00034\ \};}
+\DoxyCodeLine{\Hypertarget{elevator__state__machine_8c_source_l00035}00035\ }
+
+\end{DoxyCode}
