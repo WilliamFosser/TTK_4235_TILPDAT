@@ -38,5 +38,4 @@ void check_buttons(Elevator *elevator);
 Direction move_elevator(Elevator *elevator);
 
 
-
-void handle_stop_butn(Elevator *elevator);
+bool handle_stop_butn(Elevator *elevator);

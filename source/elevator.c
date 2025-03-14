@@ -27,6 +27,9 @@ void elevator_init(Elevator *elevator) {
     else {
         set_direction(elevator, DIRN_DOWN);
         while (elevio_floorSensor() == -1) {
+            if (!handle_stop_butn(elevator)) {
+                elevator_init(elevator);
+            }
             // Wait for elevator to reach a floor
         }
         elevator->floor = elevio_floorSensor();
@@ -38,7 +41,6 @@ void elevator_init(Elevator *elevator) {
     elevio_floorIndicator(elevio_floorSensor());
     printf("Init finished\n");
 };
-
 
 void update_floor(Elevator *elevator) { //Updates floor when defined
     elevator->floor = elevio_floorSensor();
@@ -122,7 +124,7 @@ Direction move_elevator(Elevator *elevator) { //Decides what direction the motor
         return DIRN_STOP;
     }
     int8_t last_dirr = elevator->last_direction; //Decide direction based on last direction
-    switch (last_dirr){
+    switch (last_dirr) {
         case DIRN_UP:
             for (int i = elevator->floor; i < 4; i++){
                     if (elevator->queue.orders[i][BUTTON_HALL_UP] || elevator->queue.orders[i][BUTTON_CAB]){ //First check if in same as last direction
@@ -164,8 +166,8 @@ Direction move_elevator(Elevator *elevator) { //Decides what direction the motor
             return DIRN_STOP;
             break;
         default:
-                return DIRN_STOP;
-                break;
+            return DIRN_STOP;
+            break;
     }
 }
 
@@ -215,7 +217,7 @@ void stop_elevator(Elevator *elevator){
     close_door(elevator);
 }
 
-void handle_stop_butn(Elevator *elevator){ //This was a bit tricky due to holding the stop button down
+bool handle_stop_butn(Elevator *elevator){ //This was a bit tricky due to holding the stop button down
     if (elevio_stopButton()){
         elevator->stopFlag = true;
         pop_all_orders(&(elevator->queue));
@@ -226,7 +228,7 @@ void handle_stop_butn(Elevator *elevator){ //This was a bit tricky due to holdin
         }
     }
     else{
-        return; //Return if no stop button is pressed
+        return false; //Return if no stop button is pressed
     }
     while (elevio_stopButton()){
         printf("Stop button down\n"); //While stop button is down, but this proved problematic due to inconsistency
@@ -236,4 +238,5 @@ void handle_stop_butn(Elevator *elevator){ //This was a bit tricky due to holdin
     if (elevator->door_open) {
         close_door(elevator);
     }
+    return true;
 }
