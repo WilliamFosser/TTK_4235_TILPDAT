@@ -33,7 +33,7 @@ void add_order(Queue *queue, uint8_t floor, ButtonType button_type) {
  * @brief Removes an order from the queue.
  * 
  * @param queue Pointer to the Queue structure.
- * @param floor The floor for the order.
+ * @param floor The floor for the order to deleete.
  */
 void pop_order(Queue *queue, uint8_t floor) {
     for (uint8_t i = 0; i < 3; i++) { //turn off lights for all buttons at floor

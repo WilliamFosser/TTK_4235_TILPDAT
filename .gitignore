@@ -1,0 +1,17 @@
+# Ignore build artifacts
+build/
+*.o
+
+# Ignore compiled executables
+SimElevatorServer
+SimElevatorServer.exe
+*.exe
+
+# Ignore LaTeX/Doxygen output
+latex/
+html/
+*.pdf
+*.aux
+*.log
+*.toc
+

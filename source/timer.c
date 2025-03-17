@@ -4,7 +4,7 @@
 
 /**
  * @file
- * @brief Starts a timer with a given duration.
+ * @brief Starts a timer with a given duration. Setting start_time to the current time.
  * 
  * @param timer Pointer to the Timer structure.
  * @param duration Duration of the timer in seconds.
@@ -17,7 +17,8 @@ void start_timer(Timer *timer, time_t duration) {
 }
 
 /**
- * @brief Checks if the timer has expired.
+ * @brief Checks if the timer has expired. Need to be polled constantly in a loop. 
+ * If main loop contains time consuming operations, the timer will not be accurate.
  * 
  * @param timer Pointer to the Timer structure.
  * @return true If the timer has expired.

@@ -8,7 +8,7 @@ typedef MotorDirection Direction;
 
 /**
  * @file
- * @brief Structure representing the elevator.
+ * @brief Structure representing the elevator and its state. 
  */
 typedef struct
 {
@@ -33,14 +33,14 @@ typedef struct
 void elevator_init(Elevator *elevator);
 
 /**
- * @brief Elevator state machine.
+ * @brief Elevator state machine. Starts main application loop.
  * 
  * @param elevator Pointer to the Elevator structure.
  */
 void elevator_state_machine(Elevator *elevator);
 
 /**
- * @brief Checks i@filef the elevator should stop at the current floor.
+ * @brief Checks if the elevator should stop at the current floor.
  * 
  * @param elevator Pointer to the Elevator structure.
  * @return true If the elevator should stop.
@@ -56,7 +56,7 @@ bool check_if_stop(Elevator *elevator);
 void stop_elevator(Elevator *elevator);
 
 /**
- * @brief Updates the current floor of the elevator.
+ * @brief Makes sure the elevator know its current floor. elevator->floor is never undefined.
  * 
  * @param elevator Pointer to the Elevator structure.
  */
@@ -70,7 +70,7 @@ void update_floor(Elevator *elevator);
 void open_door(Elevator *elevator);
 
 /**
- * @brief Closes the elevator door.
+ * @brief Closes the elevator door. Handles the obstruction sensor when closing the door.
  * 
  * @param elevator Pointer to the Elevator structure.
  */
@@ -85,7 +85,7 @@ void close_door(Elevator *elevator);
 void set_direction(Elevator *elevator, Direction direction);
 
 /**
- * @brief Checks the state of the buttons and updates the elevator queue.
+ * @brief Checks the state of the buttons and updates the elevator queue and button lights.
  * 
  * @param elevator Pointer to the Elevator structure.
  */
@@ -100,7 +100,7 @@ void check_buttons(Elevator *elevator);
 Direction move_elevator(Elevator *elevator);
 
 /**
- * @brief Handles the stop button functionality.
+ * @brief Handles the stop button functionality. Need to be runned continuously in a loop. 
  * 
  * @param elevator Pointer to the Elevator structure.
  * @return true If the stop button was handled.

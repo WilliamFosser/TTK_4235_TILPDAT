@@ -48,11 +48,11 @@ void elevator_init(Elevator *elevator) {
 };
 
 /**
- * @brief Updates the current floor of the elevator.
+ * @brief Updates the current floor of the elevator if floor is defined. 
  * 
  * @param elevator Pointer to the Elevator structure.
  */
-void update_floor(Elevator *elevator) { //Updates floor when defined
+void update_floor(Elevator *elevator) { 
     elevator->floor = elevio_floorSensor();
     if (elevator->floor != -1) {
         elevator->last_floor = elevator->floor;
@@ -61,21 +61,21 @@ void update_floor(Elevator *elevator) { //Updates floor when defined
 };
 
 /**
- * @brief Opens the elevator door.
+ * @brief Opens the elevator door. And sets the door_open flag to true.
  * 
  * @param elevator Pointer to the Elevator structure.
  */
-void open_door(Elevator *elevator) { //Turns on door lamp and sets door_open to true
+void open_door(Elevator *elevator) {
     elevio_doorOpenLamp(1);
     elevator->door_open = true;
 };
 
 /**
- * @brief Closes the elevator door.
+ * @brief //Turns off door lamp, and sets door_open to false. If obstruction is detected, the door will not close.
  * 
  * @param elevator Pointer to the Elevator structure.
  */
-void close_door(Elevator *elevator) { //Turns on door lamp, sets door_open to true and waits 3 seconds
+void close_door(Elevator *elevator) { 
     while(elevio_obstruction()){
         check_buttons(elevator);
         handle_stop_butn(elevator);
@@ -97,11 +97,10 @@ void close_door(Elevator *elevator) { //Turns on door lamp, sets door_open to tr
 };
 
 /**
- * @brief Checks the state of the buttons and updates the elevator queue.
+ * @brief Check if any hall buttons are pressed and update the button lamps and the elevator queue
  * 
  * @param elevator Pointer to the Elevator structure.
  */
-// Check if any hall buttons are pressed and update the button lamps and the elevator queue
 void check_buttons(Elevator *elevator) {
     for(int floor = 0; floor < N_FLOORS; floor++){
         for(int button = 0; button < N_BUTTONS; button++){ 
@@ -120,7 +119,7 @@ void check_buttons(Elevator *elevator) {
  * @param elevator Pointer to the Elevator structure.
  * @param direction The direction to set.
  */
-void set_direction(Elevator *elevator, Direction direction) { //Sets motor direction and updates bool isIdle
+void set_direction(Elevator *elevator, Direction direction) { 
     if (direction != DIRN_STOP) {
         elevator->isIdle = false;
     }
@@ -142,27 +141,31 @@ void set_direction(Elevator *elevator, Direction direction) { //Sets motor direc
  * @brief Determines the direction the elevator should move.
  * 
  * @param elevator Pointer to the Elevator structure.
- * @return Direction The direction the elevator should move.
+ * @return Direction - The direction the elevator should move.
  */
-Direction move_elevator(Elevator *elevator) { //Decides what direction the motor should move
-    if (elevator->direction != DIRN_STOP) { //Dont change direction if already moving
+Direction move_elevator(Elevator *elevator) { 
+    if (elevator->direction != DIRN_STOP) {
         return elevator->direction;
     }
-    if (elevator->stopFlag) { //Don't move if stop button is down
+    if (elevator->stopFlag) {
         return DIRN_STOP;
     }
-    int8_t last_dirr = elevator->last_direction; //Decide direction based on last direction
+    //Decide direction based on last direction
+    int8_t last_dirr = elevator->last_direction; 
     switch (last_dirr) {
         case DIRN_UP:
             for (int i = elevator->floor; i < 4; i++){
-                    if (elevator->queue.orders[i][BUTTON_HALL_UP] || elevator->queue.orders[i][BUTTON_CAB]){ //First check if in same as last direction
+                    //First check if in same as last direction
+                    if (elevator->queue.orders[i][BUTTON_HALL_UP] || elevator->queue.orders[i][BUTTON_CAB]){ 
                         return DIRN_UP;
                     }
                 }
-            for (int i = 0; i < 4;i++){ //If not check if there are orders
+            //If not check if there are orders
+            for (int i = 0; i < 4;i++){ 
                 for (int j = 0; j < 3; j++){
                     if (elevator->queue.orders[i][j]){
-                        if (i < elevator->floor){ //Where is the order relative to the elevator
+                        //Where is the order relative to the elevator
+                        if (i < elevator->floor){ 
                             return DIRN_DOWN;
                         }
                         else{
@@ -171,10 +174,12 @@ Direction move_elevator(Elevator *elevator) { //Decides what direction the motor
                     }
                 }
             }
-            return DIRN_STOP; //If no orders, stop
+            //If no orders, stop
+            return DIRN_STOP; 
             break;
         case DIRN_DOWN:
-            for (int i = elevator->floor; i >= 0; i--){ //Same as above, but opposite last direction
+            //Same as above, but opposite last direction
+            for (int i = elevator->floor; i >= 0; i--){ 
                     if (elevator->queue.orders[i][BUTTON_HALL_DOWN] || elevator->queue.orders[i][BUTTON_CAB]){
                         return DIRN_DOWN;
                     }
@@ -258,19 +263,19 @@ void stop_elevator(Elevator *elevator){
 }
 
 /**
- * @brief Handles the stop button functionality.
+ * @brief Handles the stop button functionality. 
  * 
  * @param elevator Pointer to the Elevator structure.
  * @return true If the stop button was handled.
  * @return false If the stop button was not handled.
  */
-bool handle_stop_butn(Elevator *elevator){ //This was a bit tricky due to holding the stop button down
+bool handle_stop_butn(Elevator *elevator){ 
     if (elevio_stopButton()){
         elevator->stopFlag = true;
         pop_all_orders(&(elevator->queue));
         set_direction(elevator, DIRN_STOP);
         elevio_stopLamp(1); 
-        if (elevio_floorSensor() != -1){ //Open door if at a floor
+        if (elevio_floorSensor() != -1){
             open_door(elevator);
         }
     }
@@ -278,7 +283,7 @@ bool handle_stop_butn(Elevator *elevator){ //This was a bit tricky due to holdin
         return false; //Return if no stop button is pressed
     }
     while (elevio_stopButton()){
-        printf("Stop button down\n"); //While stop button is down, but this proved problematic due to inconsistency
+        printf("Stop button down\n"); 
     }
     elevator->stopFlag = false; 
     elevio_stopLamp(0);
